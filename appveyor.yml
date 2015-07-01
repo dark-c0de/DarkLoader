@@ -6,4 +6,4 @@ build:
   verbosity: minimal
 artifacts:
 - path: C:\projects\darkloader\DarkLoader\bin\Release\DarkLoader.exe
-  name: DarkLoader
+  name: DarkLoader.exe
