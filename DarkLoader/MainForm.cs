@@ -79,7 +79,7 @@ namespace DarkLoader
 
                     reader.BaseStream.Seek(284, SeekOrigin.Begin);
                     reader.Read(BuildVersion, 0, 32);
-                    reader.BaseStream.Seek(MapTagDirOffset-36, SeekOrigin.Begin);
+                    reader.BaseStream.Seek(MapTagDirOffset - 36, SeekOrigin.Begin);
                     reader.Read(MapName, 0, 36);
                     reader.BaseStream.Seek(MapTagDirOffset, SeekOrigin.Begin);
                     reader.Read(MapTagDir, 0, 256);
@@ -154,7 +154,7 @@ namespace DarkLoader
         IntPtr PtrMapType;
         IntPtr PtrGameType;
         IntPtr PtrMpPatch;
-
+        
         private void btnDarkLoad_Click(object sender, EventArgs e)
         {
             if (listMapNames.SelectedIndex == -1)
@@ -308,6 +308,80 @@ namespace DarkLoader
         private void button1_Click(object sender, EventArgs e)
         {
             Process.Start("https://github.com/dark-c0de/DarkLoader/issues", "");
+        }
+
+
+        IntPtr HudPatchAddr;
+        private void btnHideHud_Click(object sender, EventArgs e)
+        {
+            /*
+             * Halo Online Build Live_release_0.4.1.332089
+             * 
+             * Pattern for Hud Toggle
+             * F0 3F D9 5D 93 A8 E2 DD 83 3F 00
+             * 
+             * Replace E2 DD 83 3F with C3 F5 48 40 to hide hud
+             * Change it back to bring it back
+             */
+            if (HudPatchAddr == null || HudPatchAddr.ToInt32() <= 0)
+            {
+                IntPtr startOffset = HaloOnline.MainModule.BaseAddress;
+                IntPtr endOffset = IntPtr.Add(startOffset, HaloOnline.MainModule.ModuleMemorySize);
+
+                SigScan.Classes.SigScan _sigScan = new SigScan.Classes.SigScan();
+
+                _sigScan.Process = HaloOnline;
+                _sigScan.Address = startOffset;
+                _sigScan.Size = HaloOnline.MainModule.ModuleMemorySize;
+                HudPatchAddr = _sigScan.FindPattern(new byte[] { 0xF0, 0x3F, 0xD9, 0x5D, 0x93, 0xA8, 0xE2, 0xDD, 0x83, 0x3F, 0x00 }, "xxxxxxxxxxx", 6);
+
+                if (HudPatchAddr == null || HudPatchAddr.ToInt32() <= 0)
+                {
+                    //unsupported gmae
+                    //Original Halo Online - Eldewrito!
+                    // HudPatchAddr = _sigScan.FindPattern(new byte[] { 0x17, 0x56, 0x66, 0x89, 0x47, 0x02, 0xE8, 0x4C, 0xFB, 0xFF, 0xFF, 0x57, 0x53, 0x56 }, "xxxxx??????xxx", 7);
+                }
+            }
+            int lpNumberOfBytesWritten;
+            IntPtr p = OpenProcess(0x001F0FFF, true, HaloOnline.Id);
+            byte[] HudPatch = { 0xC3, 0xF5, 0x48, 0x40 };
+            WriteProcessMemory(p, HudPatchAddr, HudPatch, 4, out lpNumberOfBytesWritten);
+        }
+
+        private void btnShowHud_Click(object sender, EventArgs e)
+        {
+            /*
+            * Halo Online Build Live_release_0.4.1.332089
+            * 
+            * Pattern for Hud Toggle
+            * F0 3F D9 5D 93 A8 E2 DD 83 3F 00
+            * 
+            * Replace E2 DD 83 3F with C3 F5 48 40 to hide hud
+            * Change it back to bring it back
+            */
+            if (HudPatchAddr == null || HudPatchAddr.ToInt32() <= 0)
+            {
+                IntPtr startOffset = HaloOnline.MainModule.BaseAddress;
+                IntPtr endOffset = IntPtr.Add(startOffset, HaloOnline.MainModule.ModuleMemorySize);
+
+                SigScan.Classes.SigScan _sigScan = new SigScan.Classes.SigScan();
+
+                _sigScan.Process = HaloOnline;
+                _sigScan.Address = startOffset;
+                _sigScan.Size = HaloOnline.MainModule.ModuleMemorySize;
+                HudPatchAddr = _sigScan.FindPattern(new byte[] { 0xF0, 0x3F, 0xD9, 0x5D, 0x93, 0xA8, 0xE2, 0xDD, 0x83, 0x3F, 0x00 }, "xxxxxxxxxxx", 6);
+
+                if (HudPatchAddr == null || HudPatchAddr.ToInt32() <= 0)
+                {
+                    //unsupported gmae
+                    //Original Halo Online - Eldewrito!
+                    // HudPatchAddr = _sigScan.FindPattern(new byte[] { 0x17, 0x56, 0x66, 0x89, 0x47, 0x02, 0xE8, 0x4C, 0xFB, 0xFF, 0xFF, 0x57, 0x53, 0x56 }, "xxxxx??????xxx", 7);
+                }
+            }
+            int lpNumberOfBytesWritten;
+            IntPtr p = OpenProcess(0x001F0FFF, true, HaloOnline.Id);
+            byte[] HudPatch = { 0xE2, 0xDD, 0x83, 0x3F };
+            WriteProcessMemory(p, HudPatchAddr, HudPatch, 4, out lpNumberOfBytesWritten);
         }
     }
 }

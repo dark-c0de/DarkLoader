@@ -1,0 +1,9 @@
+﻿- Clean this mess up
+- Create a function you can send a pattern to that will lookup the address if it doesn't already exist. If it does exist, don't look it up again, just pass the original address.
+- Allow functionality for multiple Halo Online instances to be loaded for debugging purposes
+- Camera Mode Switch (valid modes: default, first, third)
+- Center Crosshair Fix
+- Fov Slider
+- VirtualAllocEx
+- ?????
+- ??? MULTIPLAYER ???

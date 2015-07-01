@@ -38,6 +38,10 @@
             this.comboGameModes = new System.Windows.Forms.ComboBox();
             this.comboGameTypes = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnHideHud = new System.Windows.Forms.Button();
+            this.btnShowHud = new System.Windows.Forms.Button();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // listMapNames
@@ -145,7 +149,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(406, 11);
+            this.button1.Location = new System.Drawing.Point(397, 12);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 47);
             this.button1.TabIndex = 8;
@@ -153,11 +157,43 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.btnShowHud);
+            this.groupBox1.Controls.Add(this.btnHideHud);
+            this.groupBox1.Location = new System.Drawing.Point(487, 11);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(171, 320);
+            this.groupBox1.TabIndex = 9;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Tools";
+            // 
+            // btnHideHud
+            // 
+            this.btnHideHud.Location = new System.Drawing.Point(90, 20);
+            this.btnHideHud.Name = "btnHideHud";
+            this.btnHideHud.Size = new System.Drawing.Size(75, 23);
+            this.btnHideHud.TabIndex = 0;
+            this.btnHideHud.Text = "Hide Hud";
+            this.btnHideHud.UseVisualStyleBackColor = true;
+            this.btnHideHud.Click += new System.EventHandler(this.btnHideHud_Click);
+            // 
+            // btnShowHud
+            // 
+            this.btnShowHud.Location = new System.Drawing.Point(9, 20);
+            this.btnShowHud.Name = "btnShowHud";
+            this.btnShowHud.Size = new System.Drawing.Size(75, 23);
+            this.btnShowHud.TabIndex = 1;
+            this.btnShowHud.Text = "Show Hud";
+            this.btnShowHud.UseVisualStyleBackColor = true;
+            this.btnShowHud.Click += new System.EventHandler(this.btnShowHud_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(488, 342);
+            this.ClientSize = new System.Drawing.Size(670, 342);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.comboGameTypes);
             this.Controls.Add(this.comboGameModes);
@@ -176,6 +212,7 @@
             this.Text = "DarkLoader";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -192,6 +229,9 @@
         private System.Windows.Forms.ComboBox comboGameModes;
         private System.Windows.Forms.ComboBox comboGameTypes;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnHideHud;
+        private System.Windows.Forms.Button btnShowHud;
     }
 }
 
