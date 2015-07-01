@@ -89,7 +89,7 @@
             this.btnHaloClick.TabIndex = 4;
             this.btnHaloClick.Text = "Halo.Click";
             this.btnHaloClick.UseVisualStyleBackColor = true;
-            this.btnHaloClick.Click += new System.EventHandler(this.button2_Click);
+            this.btnHaloClick.Click += new System.EventHandler(this.btnHaloClick_Click);
             // 
             // btnDarkLoad
             // 
@@ -100,7 +100,7 @@
             this.btnDarkLoad.TabIndex = 5;
             this.btnDarkLoad.Text = "DarkLoad";
             this.btnDarkLoad.UseVisualStyleBackColor = true;
-            this.btnDarkLoad.Click += new System.EventHandler(this.button3_Click);
+            this.btnDarkLoad.Click += new System.EventHandler(this.btnDarkLoad_Click);
             // 
             // comboGameModes
             // 

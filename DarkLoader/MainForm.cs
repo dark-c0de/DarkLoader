@@ -13,12 +13,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SigScan.Classes;
 using System.Net;
+
 namespace DarkLoader
 {
     public partial class MainForm : Form
     {
         bool WeRunningYup = false;
         bool HaloIsRunning = false;
+        bool forceLoading = false;
         Process HaloOnline;
 
         //Lets keep the previous scan in memory so only the first scan is slow.
@@ -64,16 +66,22 @@ namespace DarkLoader
 
             foreach (var file in d.GetFiles("*.map"))
             {
+                byte[] MapHeader = new byte[756];
                 byte[] BuildVersion = new byte[32]; //0.4.1.327043 cert_MS26_new
                 byte[] MapName = new byte[36];
                 byte[] MapTagDir = new byte[256];
                 using (BinaryReader reader = new BinaryReader(new FileStream(HaloMapDir + file.Name, FileMode.Open, FileAccess.Read)))
                 {
+                    reader.BaseStream.Seek(0, SeekOrigin.Begin);
+                    reader.Read(MapHeader, 0, 756);
+
+                    int MapTagDirOffset = HelperFunctions.SearchBytes(MapHeader, Encoding.ASCII.GetBytes("level"));
+
                     reader.BaseStream.Seek(284, SeekOrigin.Begin);
                     reader.Read(BuildVersion, 0, 32);
-                    reader.BaseStream.Seek(436, SeekOrigin.Begin);
+                    reader.BaseStream.Seek(MapTagDirOffset-36, SeekOrigin.Begin);
                     reader.Read(MapName, 0, 36);
-                    reader.BaseStream.Seek(472, SeekOrigin.Begin);
+                    reader.BaseStream.Seek(MapTagDirOffset, SeekOrigin.Begin);
                     reader.Read(MapTagDir, 0, 256);
                 }
                 listMapNames.Items.Add(System.Text.Encoding.UTF8.GetString(MapName).Replace("\0", ""));
@@ -112,7 +120,10 @@ namespace DarkLoader
                 {
                     if (HaloOnline != null)
                     {
-                        this.btnDarkLoad.Invoke(new MethodInvoker(delegate { btnDarkLoad.Enabled = true; }));
+                        if (!forceLoading)
+                        {
+                            this.btnDarkLoad.Invoke(new MethodInvoker(delegate { btnDarkLoad.Enabled = true; }));
+                        }
                         HaloIsRunning = true;
                     }
                     else
@@ -131,9 +142,9 @@ namespace DarkLoader
                 Thread.Sleep(200);
             }
         }
-        private void button2_Click(object sender, EventArgs e)
+        private void btnHaloClick_Click(object sender, EventArgs e)
         {
-            Process.Start("https://halo.click/", "");
+            Process.Start("https://forum.halo.click/index.php?/topic/234-program-darkloader/", "");
         }
 
 
@@ -144,13 +155,23 @@ namespace DarkLoader
         IntPtr PtrGameType;
         IntPtr PtrMpPatch;
 
-        private void button3_Click(object sender, EventArgs e)
+        private void btnDarkLoad_Click(object sender, EventArgs e)
         {
             if (listMapNames.SelectedIndex == -1)
             {
                 MessageBox.Show("Please select a map to load on the side list.", "DarkLoader");
                 return;
             }
+            forceLoading = true;
+            btnDarkLoad.Text = "Scanning";
+            btnDarkLoad.Enabled = false;
+
+            Thread forceLoadMap = new Thread(ForceLoadMap);
+            forceLoadMap.Start();
+        }
+
+        private void ForceLoadMap()
+        {
             //Do Magic
             try
             {
@@ -168,7 +189,7 @@ namespace DarkLoader
                     _sigScan.Size = HaloOnline.MainModule.ModuleMemorySize;
                     pAddr = _sigScan.FindPattern(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x6D, 0x61, 0x70, 0x73, 0x5C, 0x6D, 0x61, 0x69, 0x6E, 0x6D, 0x65, 0x6E, 0x75 }, "xxxxxxxxxxxxxxxxxxxxx", 0);
 
-                    if (pAddr == null || pAddr.ToInt32() == 0)
+                    if (pAddr == null || pAddr.ToInt32() <= 0)
                     {
                         MessageBox.Show("DarkLoader failed to find the map loading code...\nThis could mean two things:\n\n1. You tried loading a map already and closed + opened HaloLoader on the same EXE (You have to keep it running!)\n2. This version of Halo Online is not supported.");
                         return;
@@ -195,48 +216,56 @@ namespace DarkLoader
                  *
                  * */
 
-                if (MpPatchAddr == null || MpPatchAddr.ToInt32() == 0)
+                if (MpPatchAddr == null || MpPatchAddr.ToInt32() <= 0)
                 {
                     IntPtr startOffset = HaloOnline.MainModule.BaseAddress;
                     IntPtr endOffset = IntPtr.Add(startOffset, HaloOnline.MainModule.ModuleMemorySize);
 
+
+                    //New builds of Halo Online
                     SigScan.Classes.SigScan _sigScan = new SigScan.Classes.SigScan();
 
                     _sigScan.Process = HaloOnline;
                     _sigScan.Address = startOffset;
                     _sigScan.Size = HaloOnline.MainModule.ModuleMemorySize;
                     MpPatchAddr = _sigScan.FindPattern(new byte[] { 0x8B, 0xCE, 0x66, 0x89, 0x43, 0x02, 0xE8, 0x9E, 0x15, 0x00, 0x00, 0x8B, 0x47, 0x10 }, "xxxxx??????xxx", 7);
+
+                    if (MpPatchAddr == null || MpPatchAddr.ToInt32() <= 0)
+                    {
+                        //Original Halo Online - Eldewrito!
+                        MpPatchAddr = _sigScan.FindPattern(new byte[] { 0x17, 0x56, 0x66, 0x89, 0x47, 0x02, 0xE8, 0x4C, 0xFB, 0xFF, 0xFF, 0x57, 0x53, 0x56 }, "xxxxx??????xxx", 7);
+                    }
+
                     PtrMpPatch = MpPatchAddr - 0x1;
                 }
 
                 //Pointer finds 0xF605FE - actual is 0xF605FD
 
-                if (PtrMpPatch.ToInt32() == 0)
+                if (PtrMpPatch.ToInt32() <= 0)
                 {
                     MessageBox.Show("Failed to find pointer... Go file a bug report.");
                     return;
 
                 }
-
+                this.btnDarkLoad.Invoke(new MethodInvoker(delegate { btnDarkLoad.Text = "Patching"; }));
                 byte[] nop = { 0x90, 0x90, 0x90, 0x90, 0x90 };
                 WriteProcessMemory(p, PtrMpPatch, nop, 5, out lpNumberOfBytesWritten);
 
                 byte[] mapReset = { 0x1 };
-
                 // sets map type
                 byte[] mapType = { 0, 0, 0, 0 };
-                BitConverter.GetBytes(Convert.ToInt32(comboGameModes.SelectedIndex)).CopyTo(mapType, 0);
                 // sets gametype
                 byte[] gameType = { 0, 0, 0, 0 };
-                BitConverter.GetBytes(Convert.ToInt32(comboGameTypes.SelectedIndex)).CopyTo(gameType, 0);
-
                 // Infinite play time
                 byte[] mapTime = { 0x0 };
-
                 // Grab map name from selected listbox
                 byte[] mapName = new byte[36];
-                Encoding.ASCII.GetBytes(listMapNames.SelectedItem.ToString()).CopyTo(mapName, 0);
-
+                this.comboGameModes.Invoke(new MethodInvoker(delegate
+                {
+                    BitConverter.GetBytes(Convert.ToInt32(comboGameModes.SelectedIndex)).CopyTo(mapType, 0);
+                    BitConverter.GetBytes(Convert.ToInt32(comboGameTypes.SelectedIndex)).CopyTo(gameType, 0);
+                    Encoding.ASCII.GetBytes(listMapNames.SelectedItem.ToString()).CopyTo(mapName, 0);
+                }));
                 WriteProcessMemory(p, PtrGameType, gameType, 4, out lpNumberOfBytesWritten);
                 WriteProcessMemory(p, PtrMapType, mapType, 4, out lpNumberOfBytesWritten);
                 WriteProcessMemory(p, PtrMapName, mapName, mapName.Length, out lpNumberOfBytesWritten);
@@ -247,6 +276,12 @@ namespace DarkLoader
             {
                 MessageBox.Show("Something went wrong...\n" + ex.Message, "DarkLoader Error");
             }
+            this.btnDarkLoad.Invoke(new MethodInvoker(delegate
+            {
+                btnDarkLoad.Text = "DarkLoad";
+                btnDarkLoad.Enabled = true;
+            }));
+            forceLoading = false;
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
