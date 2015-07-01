@@ -1,0 +1,9 @@
+version: 1.0.0.{build}
+configuration: Release
+platform: Any CPU
+build:
+  project: DarkLoader.sln
+  verbosity: minimal
+artifacts:
+- path: C:\projects\darkloader\DarkLoader\bin\Release\DarkLoader.exe
+  name: DarkLoader
