@@ -11,9 +11,8 @@ build:
 
 # scripts to run after build
 after_build:
-	- cd c:\projects\darkloader
-	- copy c:\projects\darkloader\DarkLoader\bin\Release\DarkLoader.exe c:\projects\darkloader\DarkLoader.exe
-	
+  - cd c:\projects\darkloader
+  - copy c:\projects\darkloader\DarkLoader\bin\Release\DarkLoader.exe c:\projects\darkloader\DarkLoader.exe
 artifacts:
-	- path: DarkLoader.exe
-	  name: DarkLoader.exe
+  - path: DarkLoader.exe
+    name: DarkLoader.exe
