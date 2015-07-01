@@ -296,7 +296,7 @@ namespace DarkLoader
                 ProcessStartInfo HaloOnline = new ProcessStartInfo();
                 HaloOnline.FileName = Application.StartupPath + @"\eldorado.exe";
                 HaloOnline.WorkingDirectory = Application.StartupPath;
-                HaloOnline.Arguments = "-window --account 123 --sign-in-code 123";
+                HaloOnline.Arguments = "-window --account 123 --sign-in-code 123 -launcher";
                 Process.Start(HaloOnline);
             }
             else
