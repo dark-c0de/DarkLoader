@@ -4,7 +4,7 @@
 - Camera Mode Switch (valid modes: default, first, third)
 - Center Crosshair Fix
 - Fov Slider
-- VirtualAllocEx
+- VirtualAllocEx VirtualProtectEx 
 - Create a config file to store patterns to load and use. On first run, scan all the patterns and enable\disable functionality based on what patterns succeeded and which ones failed.
 - Don't run a pattern scan when a user hits a button like Show\Hide hud. The pattern scan should already have taken place before and had been cached.
 - Store pattern locations out to disk for debug purposes, allow people to share + add functionality and patterns without needing to compile C# code.

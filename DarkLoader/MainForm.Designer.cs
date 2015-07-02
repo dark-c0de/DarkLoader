@@ -45,6 +45,7 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.groupTools.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -171,6 +172,7 @@
             // 
             // groupTools
             // 
+            this.groupTools.Controls.Add(this.label2);
             this.groupTools.Controls.Add(this.btnShowHud);
             this.groupTools.Controls.Add(this.btnHideHud);
             this.groupTools.Location = new System.Drawing.Point(526, 12);
@@ -241,6 +243,16 @@
             this.groupBox5.TabIndex = 13;
             this.groupBox5.TabStop = false;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 57);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(142, 91);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Note:\r\nSpeed is a bit slow because\r\nwe are doing pattern scans.\r\n\r\nWe will fix th" +
+    "e slowness in \r\nnewer releases. Until then, \r\nthis might be slow!";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -264,6 +276,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupTools.ResumeLayout(false);
+            this.groupTools.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
@@ -291,6 +304,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Label label2;
     }
 }
 
