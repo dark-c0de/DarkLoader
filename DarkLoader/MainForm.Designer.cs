@@ -38,28 +38,38 @@
             this.comboGameModes = new System.Windows.Forms.ComboBox();
             this.comboGameTypes = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupTools = new System.Windows.Forms.GroupBox();
             this.btnHideHud = new System.Windows.Forms.Button();
             this.btnShowHud = new System.Windows.Forms.Button();
-            this.groupBox1.SuspendLayout();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.groupTools.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // listMapNames
             // 
+            this.listMapNames.BackColor = System.Drawing.SystemColors.Control;
+            this.listMapNames.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listMapNames.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listMapNames.FormattingEnabled = true;
             this.listMapNames.ItemHeight = 18;
-            this.listMapNames.Location = new System.Drawing.Point(15, 11);
+            this.listMapNames.Location = new System.Drawing.Point(8, 20);
             this.listMapNames.Name = "listMapNames";
-            this.listMapNames.Size = new System.Drawing.Size(115, 292);
+            this.listMapNames.Size = new System.Drawing.Size(110, 270);
             this.listMapNames.TabIndex = 0;
             // 
             // btnLaunchHaloOnline
             // 
             this.btnLaunchHaloOnline.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLaunchHaloOnline.Location = new System.Drawing.Point(365, 308);
+            this.btnLaunchHaloOnline.Location = new System.Drawing.Point(50, 15);
             this.btnLaunchHaloOnline.Name = "btnLaunchHaloOnline";
-            this.btnLaunchHaloOnline.Size = new System.Drawing.Size(107, 23);
+            this.btnLaunchHaloOnline.Size = new System.Drawing.Size(107, 33);
             this.btnLaunchHaloOnline.TabIndex = 1;
             this.btnLaunchHaloOnline.Text = "Launch Halo Online";
             this.btnLaunchHaloOnline.UseVisualStyleBackColor = true;
@@ -67,19 +77,21 @@
             // 
             // listMapInfo
             // 
+            this.listMapInfo.BackColor = System.Drawing.SystemColors.Control;
+            this.listMapInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.listMapInfo.Enabled = false;
             this.listMapInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listMapInfo.FormattingEnabled = true;
-            this.listMapInfo.Location = new System.Drawing.Point(136, 182);
+            this.listMapInfo.Location = new System.Drawing.Point(8, 20);
             this.listMapInfo.Name = "listMapInfo";
-            this.listMapInfo.Size = new System.Drawing.Size(336, 121);
+            this.listMapInfo.Size = new System.Drawing.Size(346, 91);
             this.listMapInfo.TabIndex = 2;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(136, 11);
+            this.label1.Location = new System.Drawing.Point(157, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(345, 156);
             this.label1.TabIndex = 3;
@@ -87,7 +99,7 @@
             // 
             // btnHaloClick
             // 
-            this.btnHaloClick.Location = new System.Drawing.Point(14, 308);
+            this.btnHaloClick.Location = new System.Drawing.Point(445, 69);
             this.btnHaloClick.Name = "btnHaloClick";
             this.btnHaloClick.Size = new System.Drawing.Size(75, 23);
             this.btnHaloClick.TabIndex = 4;
@@ -98,9 +110,9 @@
             // btnDarkLoad
             // 
             this.btnDarkLoad.Enabled = false;
-            this.btnDarkLoad.Location = new System.Drawing.Point(284, 308);
+            this.btnDarkLoad.Location = new System.Drawing.Point(163, 15);
             this.btnDarkLoad.Name = "btnDarkLoad";
-            this.btnDarkLoad.Size = new System.Drawing.Size(75, 23);
+            this.btnDarkLoad.Size = new System.Drawing.Size(107, 33);
             this.btnDarkLoad.TabIndex = 5;
             this.btnDarkLoad.Text = "DarkLoad";
             this.btnDarkLoad.UseVisualStyleBackColor = true;
@@ -121,7 +133,7 @@
             "Unknown 8",
             "Unknown 9",
             "Unknown 10"});
-            this.comboGameModes.Location = new System.Drawing.Point(194, 309);
+            this.comboGameModes.Location = new System.Drawing.Point(101, 22);
             this.comboGameModes.Name = "comboGameModes";
             this.comboGameModes.Size = new System.Drawing.Size(84, 21);
             this.comboGameModes.TabIndex = 6;
@@ -142,14 +154,14 @@
             "Territories",
             "Assault",
             "Infection"});
-            this.comboGameTypes.Location = new System.Drawing.Point(104, 309);
+            this.comboGameTypes.Location = new System.Drawing.Point(11, 22);
             this.comboGameTypes.Name = "comboGameTypes";
             this.comboGameTypes.Size = new System.Drawing.Size(84, 21);
             this.comboGameTypes.TabIndex = 7;
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(397, 12);
+            this.button1.Location = new System.Drawing.Point(445, 20);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 47);
             this.button1.TabIndex = 8;
@@ -157,16 +169,16 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // groupBox1
+            // groupTools
             // 
-            this.groupBox1.Controls.Add(this.btnShowHud);
-            this.groupBox1.Controls.Add(this.btnHideHud);
-            this.groupBox1.Location = new System.Drawing.Point(487, 11);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(171, 320);
-            this.groupBox1.TabIndex = 9;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Tools";
+            this.groupTools.Controls.Add(this.btnShowHud);
+            this.groupTools.Controls.Add(this.btnHideHud);
+            this.groupTools.Location = new System.Drawing.Point(526, 12);
+            this.groupTools.Name = "groupTools";
+            this.groupTools.Size = new System.Drawing.Size(171, 362);
+            this.groupTools.TabIndex = 9;
+            this.groupTools.TabStop = false;
+            this.groupTools.Text = "Tools";
             // 
             // btnHideHud
             // 
@@ -188,21 +200,60 @@
             this.btnShowHud.UseVisualStyleBackColor = true;
             this.btnShowHud.Click += new System.EventHandler(this.btnShowHud_Click);
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.listMapNames);
+            this.groupBox2.Location = new System.Drawing.Point(12, 12);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(135, 299);
+            this.groupBox2.TabIndex = 10;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Available Maps";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.listMapInfo);
+            this.groupBox3.Location = new System.Drawing.Point(156, 186);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(364, 125);
+            this.groupBox3.TabIndex = 11;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Map Tag Data";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.comboGameModes);
+            this.groupBox4.Controls.Add(this.comboGameTypes);
+            this.groupBox4.Location = new System.Drawing.Point(12, 317);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(195, 57);
+            this.groupBox4.TabIndex = 12;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Load Options";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.btnLaunchHaloOnline);
+            this.groupBox5.Controls.Add(this.btnDarkLoad);
+            this.groupBox5.Location = new System.Drawing.Point(213, 317);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(307, 57);
+            this.groupBox5.TabIndex = 13;
+            this.groupBox5.TabStop = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(670, 342);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.comboGameTypes);
-            this.Controls.Add(this.comboGameModes);
-            this.Controls.Add(this.btnDarkLoad);
+            this.ClientSize = new System.Drawing.Size(712, 386);
+            this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.btnHaloClick);
-            this.Controls.Add(this.btnLaunchHaloOnline);
+            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupTools);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.listMapInfo);
-            this.Controls.Add(this.listMapNames);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -212,7 +263,11 @@
             this.Text = "DarkLoader";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.groupBox1.ResumeLayout(false);
+            this.groupTools.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -229,9 +284,13 @@
         private System.Windows.Forms.ComboBox comboGameModes;
         private System.Windows.Forms.ComboBox comboGameTypes;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupTools;
         private System.Windows.Forms.Button btnHideHud;
         private System.Windows.Forms.Button btnShowHud;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox groupBox5;
     }
 }
 

@@ -1,13 +1,21 @@
-version: 1.0.0.{build}
+version: 1.0.1.{build}
 
 # clone directory
 clone_folder: c:\projects\darkloader
 
 configuration: Release
 platform: Any CPU
+
+assembly_info:
+  patch: true
+  file: '**\AssemblyInfo.*'
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+
 build:
   project: DarkLoader.sln
-  verbosity: detailed
+  verbosity: normal
 
 # scripts to run after build
 after_build:

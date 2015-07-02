@@ -86,6 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="halo_shield_128x128.ico" />
+    <Content Include="Todo.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

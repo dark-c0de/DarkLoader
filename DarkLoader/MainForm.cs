@@ -122,13 +122,13 @@ namespace DarkLoader
                     {
                         if (!forceLoading)
                         {
-                            this.btnDarkLoad.Invoke(new MethodInvoker(delegate { btnDarkLoad.Enabled = true; }));
+                            this.btnDarkLoad.Invoke(new MethodInvoker(delegate { btnDarkLoad.Enabled = true; groupTools.Enabled = true; }));
                         }
                         HaloIsRunning = true;
                     }
                     else
                     {
-                        this.btnDarkLoad.Invoke(new MethodInvoker(delegate { btnDarkLoad.Enabled = false; }));
+                        this.btnDarkLoad.Invoke(new MethodInvoker(delegate { btnDarkLoad.Enabled = false; groupTools.Enabled = false; }));
                         HaloIsRunning = false;
                         HaloOnline = null;
                         pAddr = new IntPtr(0);
