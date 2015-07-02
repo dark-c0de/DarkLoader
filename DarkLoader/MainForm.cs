@@ -137,7 +137,7 @@ namespace DarkLoader
                 var versionString = (new WebClient()).DownloadString(url);
                 Version newVersion = Version.Parse(versionString);
                 Version currentVersion = Version.Parse(Application.ProductVersion);
-                if (currentVersion <= newVersion)
+                if (currentVersion < newVersion)
                 {
                     this.Invoke(new MethodInvoker(delegate { this.Text = "DarkLoader - Update Available!"; }));
 
