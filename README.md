@@ -9,6 +9,11 @@ Anyone is welcome to help work on DarkLoader, so please, please do!
 
 Please also leave a comment on the [Forum Thread](https://forum.halo.click/index.php?/topic/234-program-darkloader/) if you enjoyed this tool, maybe you have a question, or maybe it doesn't work at all for you! Let us know. 
 
+## Tested Versions
+* 1.106708_cert_ms23___release (April 12th, 2015)
+* Live_release_0.4.1.332089 (?)
+* Live_release_8.1.373869 (July 20th, 2015)
+
 ### Here's a feature list of what it can do right now:
 1. "DarkLoad" maps on every available gametype, and every map type. (Including Forge!), from every "known" build of Halo Online.
 2. A Halo Online Launcher button to launch the game.
