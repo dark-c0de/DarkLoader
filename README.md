@@ -1,7 +1,7 @@
 # DarkLoader [![Build status](https://ci.appveyor.com/api/projects/status/evq3v5pgw6wxegi4?svg=true)](https://ci.appveyor.com/project/dark-c0de/darkloader)
 Halo Loader for all Halo Online Versions
 
-![DarkLoader](https://blam.halo.click/GD57p9.png)
+![DarkLoader](https://halo.click/jridZJ)
 
 DarkLoader is a tool aimed to work with all builds of Halo Online to date, and future builds to come.
 
