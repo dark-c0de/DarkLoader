@@ -21,6 +21,9 @@ namespace DarkLoader
         bool WeRunningYup = false;
         bool HaloIsRunning = false;
         bool forceLoading = false;
+
+        string HaloOnlineEXE = "eldorado";
+
         Process HaloOnline;
 
         //Lets keep the previous scan in memory so only the first scan is slow.
@@ -97,6 +100,11 @@ namespace DarkLoader
             WeRunningYup = true;
             comboGameModes.SelectedIndex = 2;
             comboGameTypes.SelectedIndex = 0;
+
+            if (File.Exists(Application.StartupPath + @"\halo_online.exe"))
+            {
+                HaloOnlineEXE = "halo_online";
+            }
             string HaloMapDir = Application.StartupPath + @"\maps\";
             DirectoryInfo d = new DirectoryInfo(HaloMapDir);
 
@@ -154,7 +162,7 @@ namespace DarkLoader
         {
             while (WeRunningYup)
             {
-                HaloOnline = Process.GetProcessesByName("eldorado").FirstOrDefault();
+                HaloOnline = Process.GetProcessesByName(HaloOnlineEXE).FirstOrDefault();
                 try
                 {
                     if (HaloOnline != null)
@@ -333,7 +341,7 @@ namespace DarkLoader
             if (!HaloIsRunning)
             {
                 ProcessStartInfo HaloOnline = new ProcessStartInfo();
-                HaloOnline.FileName = Application.StartupPath + @"\eldorado.exe";
+                HaloOnline.FileName = Application.StartupPath + @"\" + HaloOnlineEXE + ".exe";
                 HaloOnline.WorkingDirectory = Application.StartupPath;
                 HaloOnline.Arguments = "-window --account 123 --sign-in-code 123 -launcher";
                 Process.Start(HaloOnline);
@@ -356,7 +364,7 @@ namespace DarkLoader
             //TODO run these in threads
             btnHideHud.Text = "Scanning";
             btnHideHud.Enabled = false;
-           
+
             /*
              * Halo Online Build Live_release_0.4.1.332089
              * 
@@ -407,7 +415,7 @@ namespace DarkLoader
             }
             btnHideHud.Text = "Hide Hud";
             btnHideHud.Enabled = true;
-           
+
         }
 
         private void btnShowHud_Click(object sender, EventArgs e)
@@ -415,7 +423,7 @@ namespace DarkLoader
             //TODO run these in threads
             btnShowHud.Text = "Scanning";
             btnShowHud.Enabled = false;
-            
+
             /*
             * Halo Online Build Live_release_0.4.1.332089
             * 
@@ -464,7 +472,7 @@ namespace DarkLoader
             }
             btnShowHud.Text = "Show Hud";
             btnShowHud.Enabled = true;
-           
+
         }
     }
 }
