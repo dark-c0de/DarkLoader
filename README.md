@@ -14,6 +14,7 @@ Please also leave a comment on the [Forum Thread](https://forum.halo.click/index
 * Live_release_0.4.1.332089 (?)
 * Live_release_8.1.373869 (July 20th, 2015)
 * Live_release_9.1.416138 (August 1st, 2015)
+* Live_release_10.1.430653 (August 7th, 2015)
 
 ### Here's a feature list of what it can do right now:
 1. "DarkLoad" maps on every available gametype, and every map type. (Including Forge!), from every "known" build of Halo Online.
