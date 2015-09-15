@@ -18,6 +18,8 @@ build:
   verbosity: normal
 
 # scripts to run after build
+before_build:
+  - nuget restore
 after_build:
   - cd c:\projects\darkloader
   - copy c:\projects\darkloader\DarkLoader\bin\Release\DarkLoader.exe c:\projects\darkloader\DarkLoader.exe
