@@ -9,6 +9,13 @@ namespace DarkLoader
 {
     static class Program
     {
+        public static string PatchFile = "DarkLoader-Patches.json";
+#if DEBUG
+        public static bool IsDebug = true;
+#else
+        public static bool IsDebug = false;
+#endif
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -20,14 +27,14 @@ namespace DarkLoader
 
             if (!File.Exists(Application.StartupPath + @"\maps\tags.dat"))
             {
-                MessageBox.Show("Please load DarkLoader from your Halo Online Installation Directory.","Halo.Click - DarkLoader");
+                MessageBox.Show("Please load DarkLoader from your Halo Online Installation Directory.", "Halo.Click - DarkLoader");
                 Application.Exit();
             }
             else
             {
                 Application.Run(new MainForm());
             }
-           
+
         }
     }
 }

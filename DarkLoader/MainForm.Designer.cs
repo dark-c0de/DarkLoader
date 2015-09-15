@@ -37,20 +37,23 @@
             this.btnDarkLoad = new System.Windows.Forms.Button();
             this.comboGameModes = new System.Windows.Forms.ComboBox();
             this.comboGameTypes = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnHelpMe = new System.Windows.Forms.Button();
             this.groupTools = new System.Windows.Forms.GroupBox();
-            this.btnHideHud = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.btnShowHud = new System.Windows.Forms.Button();
+            this.btnHideHud = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnPatchEditor = new System.Windows.Forms.Button();
             this.groupTools.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // listMapNames
@@ -80,11 +83,11 @@
             // 
             this.listMapInfo.BackColor = System.Drawing.SystemColors.Control;
             this.listMapInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listMapInfo.Enabled = false;
             this.listMapInfo.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listMapInfo.FormattingEnabled = true;
             this.listMapInfo.Location = new System.Drawing.Point(8, 20);
             this.listMapInfo.Name = "listMapInfo";
+            this.listMapInfo.SelectionMode = System.Windows.Forms.SelectionMode.None;
             this.listMapInfo.Size = new System.Drawing.Size(346, 91);
             this.listMapInfo.TabIndex = 2;
             // 
@@ -160,15 +163,15 @@
             this.comboGameTypes.Size = new System.Drawing.Size(84, 21);
             this.comboGameTypes.TabIndex = 7;
             // 
-            // button1
+            // btnHelpMe
             // 
-            this.button1.Location = new System.Drawing.Point(445, 20);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 47);
-            this.button1.TabIndex = 8;
-            this.button1.Text = "Doesn\'t Work?";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnHelpMe.Location = new System.Drawing.Point(445, 20);
+            this.btnHelpMe.Name = "btnHelpMe";
+            this.btnHelpMe.Size = new System.Drawing.Size(75, 47);
+            this.btnHelpMe.TabIndex = 8;
+            this.btnHelpMe.Text = "Doesn\'t Work?";
+            this.btnHelpMe.UseVisualStyleBackColor = true;
+            this.btnHelpMe.Click += new System.EventHandler(this.button1_Click);
             // 
             // groupTools
             // 
@@ -177,20 +180,20 @@
             this.groupTools.Controls.Add(this.btnHideHud);
             this.groupTools.Location = new System.Drawing.Point(526, 12);
             this.groupTools.Name = "groupTools";
-            this.groupTools.Size = new System.Drawing.Size(171, 362);
+            this.groupTools.Size = new System.Drawing.Size(171, 165);
             this.groupTools.TabIndex = 9;
             this.groupTools.TabStop = false;
             this.groupTools.Text = "Tools";
             // 
-            // btnHideHud
+            // label2
             // 
-            this.btnHideHud.Location = new System.Drawing.Point(90, 20);
-            this.btnHideHud.Name = "btnHideHud";
-            this.btnHideHud.Size = new System.Drawing.Size(75, 23);
-            this.btnHideHud.TabIndex = 0;
-            this.btnHideHud.Text = "Hide Hud";
-            this.btnHideHud.UseVisualStyleBackColor = true;
-            this.btnHideHud.Click += new System.EventHandler(this.btnHideHud_Click);
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(6, 57);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(142, 91);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Note:\r\nSpeed is a bit slow because\r\nwe are doing pattern scans.\r\n\r\nWe will fix th" +
+    "e slowness in \r\nnewer releases. Until then, \r\nthis might be slow!";
             // 
             // btnShowHud
             // 
@@ -201,6 +204,16 @@
             this.btnShowHud.Text = "Show Hud";
             this.btnShowHud.UseVisualStyleBackColor = true;
             this.btnShowHud.Click += new System.EventHandler(this.btnShowHud_Click);
+            // 
+            // btnHideHud
+            // 
+            this.btnHideHud.Location = new System.Drawing.Point(90, 20);
+            this.btnHideHud.Name = "btnHideHud";
+            this.btnHideHud.Size = new System.Drawing.Size(75, 23);
+            this.btnHideHud.TabIndex = 0;
+            this.btnHideHud.Text = "Hide Hud";
+            this.btnHideHud.UseVisualStyleBackColor = true;
+            this.btnHideHud.Click += new System.EventHandler(this.btnHideHud_Click);
             // 
             // groupBox2
             // 
@@ -243,28 +256,39 @@
             this.groupBox5.TabIndex = 13;
             this.groupBox5.TabStop = false;
             // 
-            // label2
+            // groupBox1
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 57);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(142, 91);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Note:\r\nSpeed is a bit slow because\r\nwe are doing pattern scans.\r\n\r\nWe will fix th" +
-    "e slowness in \r\nnewer releases. Until then, \r\nthis might be slow!";
+            this.groupBox1.Controls.Add(this.btnPatchEditor);
+            this.groupBox1.Location = new System.Drawing.Point(526, 317);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(174, 57);
+            this.groupBox1.TabIndex = 14;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Developer Tools";
+            // 
+            // btnPatchEditor
+            // 
+            this.btnPatchEditor.Location = new System.Drawing.Point(9, 22);
+            this.btnPatchEditor.Name = "btnPatchEditor";
+            this.btnPatchEditor.Size = new System.Drawing.Size(156, 23);
+            this.btnPatchEditor.TabIndex = 0;
+            this.btnPatchEditor.Text = "Patch Editor";
+            this.btnPatchEditor.UseVisualStyleBackColor = true;
+            this.btnPatchEditor.Click += new System.EventHandler(this.btnPatchEditor_click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(712, 386);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.btnHaloClick);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupTools);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnHelpMe);
             this.Controls.Add(this.label1);
             this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -281,6 +305,7 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -296,7 +321,7 @@
         private System.Windows.Forms.Button btnDarkLoad;
         private System.Windows.Forms.ComboBox comboGameModes;
         private System.Windows.Forms.ComboBox comboGameTypes;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnHelpMe;
         private System.Windows.Forms.GroupBox groupTools;
         private System.Windows.Forms.Button btnHideHud;
         private System.Windows.Forms.Button btnShowHud;
@@ -305,6 +330,8 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnPatchEditor;
     }
 }
 

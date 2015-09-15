@@ -13,18 +13,20 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SigScan.Classes;
 using System.Net;
+using Newtonsoft.Json;
 namespace DarkLoader
 {
     public partial class MainForm : Form
     {
-        Process HaloOnline;
+        public static Process HaloOnline;
+        public static bool HaloIsRunning = false;
 
         //Lets keep the previous scan in memory so only the first scan is slow.
         IntPtr pAddr;
         IntPtr MpPatchAddr;
 
         bool WeRunningYup = false;
-        bool HaloIsRunning = false;
+       
         bool forceLoading = false;
 
         string HaloOnlineEXE = "eldorado";
@@ -36,14 +38,31 @@ namespace DarkLoader
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Thread loadPatches = new Thread(MagicPatches.LoadPatches);
+            loadPatches.Start();
             WeRunningYup = true;
+            /*
+            if (!File.Exists("DarkLoader-PatchList.json"))
+            {
+                MessageBox.Show("Can't find DarkLoader-PatchList.json, closing.");
+                Application.Exit();
+                return;
+            }
+
+            string patchList = File.ReadAllText("DarkLoader-PatchList.json");
+            BytePatcher Patches = JsonConvert.DeserializeObject<BytePatcher>(patchList);
+            */
+            //Set Default Game Mode combo boxes to 
             comboGameModes.SelectedIndex = 2;
             comboGameTypes.SelectedIndex = 0;
 
+            //Are we running the new halo_online.exe build? If so, set the exe name accordingly.
             if (File.Exists(Application.StartupPath + @"\halo_online.exe"))
             {
                 HaloOnlineEXE = "halo_online";
             }
+
+            //Let's load the maps up and pull out their info
             string HaloMapDir = Application.StartupPath + @"\maps\";
             DirectoryInfo d = new DirectoryInfo(HaloMapDir);
 
@@ -70,11 +89,17 @@ namespace DarkLoader
                 listMapNames.Items.Add(System.Text.Encoding.UTF8.GetString(MapName).Replace("\0", ""));
                 listMapInfo.Items.Add(System.Text.Encoding.UTF8.GetString(BuildVersion).Replace("\0", "") + " " + System.Text.Encoding.UTF8.GetString(MapTagDir).Replace("\0", ""));
             }
+
+            //Let's keep an eye out for Halo starting and stopping.
             Thread haloWatcher = new Thread(IsHaloRunning);
             haloWatcher.Start();
 
-            Thread checkUpdates = new Thread(CheckForUpdates);
-            checkUpdates.Start();
+            //Let's make sure people are running the greatest latest turd available
+            if (!Program.IsDebug)
+            {
+                Thread checkUpdates = new Thread(CheckForUpdates);
+                checkUpdates.Start();
+            }
         }
         private void CheckForUpdates()
         {
@@ -101,10 +126,10 @@ namespace DarkLoader
         {
             while (WeRunningYup)
             {
-                HaloOnline = Process.GetProcessesByName(HaloOnlineEXE).FirstOrDefault();
+               // HaloOnline = Process.GetProcessesByName(HaloOnlineEXE).FirstOrDefault();
                 try
                 {
-                    if (HaloOnline != null)
+                    if (!HaloOnline.HasExited)
                     {
                         if (!forceLoading)
                         {
@@ -165,7 +190,7 @@ namespace DarkLoader
 
                 if (pAddr == null || pAddr.ToInt32() == 0)
                 {
-                    pAddr = ScanForPattern(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x6D, 0x61, 0x70, 0x73, 0x5C, 0x6D, 0x61, 0x69, 0x6E, 0x6D, 0x65, 0x6E, 0x75 }, "xxxxxxxxxxxxxxxxxxxxx", 0);
+                    pAddr = MagicPatches.ScanForPattern(HaloOnline, new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x6D, 0x61, 0x70, 0x73, 0x5C, 0x6D, 0x61, 0x69, 0x6E, 0x6D, 0x65, 0x6E, 0x75 }, "xxxxxxxxxxxxxxxxxxxxx", 0);
 
                     if (pAddr == null || pAddr.ToInt32() <= 0)
                     {
@@ -198,12 +223,12 @@ namespace DarkLoader
                 {
                     //New builds of Halo Online
 
-                    MpPatchAddr = ScanForPattern(new byte[] { 0x8B, 0xCE, 0x66, 0x89, 0x43, 0x02, 0xE8, 0x9E, 0x15, 0x00, 0x00, 0x8B, 0x47, 0x10 }, "xxxxx??????xxx", 7);
+                    MpPatchAddr = MagicPatches.ScanForPattern(HaloOnline, new byte[] { 0x8B, 0xCE, 0x66, 0x89, 0x43, 0x02, 0xE8, 0x9E, 0x15, 0x00, 0x00, 0x8B, 0x47, 0x10 }, "xxxxx??????xxx", 7);
 
                     if (MpPatchAddr == null || MpPatchAddr.ToInt32() <= 0)
                     {
                         //Original Halo Online - Eldewrito!
-                        MpPatchAddr = ScanForPattern(new byte[] { 0x17, 0x56, 0x66, 0x89, 0x47, 0x02, 0xE8, 0x4C, 0xFB, 0xFF, 0xFF, 0x57, 0x53, 0x56 }, "xxxxx??????xxx", 7);
+                        MpPatchAddr = MagicPatches.ScanForPattern(HaloOnline, new byte[] { 0x17, 0x56, 0x66, 0x89, 0x47, 0x02, 0xE8, 0x4C, 0xFB, 0xFF, 0xFF, 0x57, 0x53, 0x56 }, "xxxxx??????xxx", 7);
                     }
 
                     PtrMpPatch = MpPatchAddr - 0x1;
@@ -220,7 +245,7 @@ namespace DarkLoader
                 this.btnDarkLoad.Invoke(new MethodInvoker(delegate { btnDarkLoad.Text = "Patching"; }));
                 byte[] nop = { 0x90, 0x90, 0x90, 0x90, 0x90 };
                 Memory.WriteProcessMemory(p, PtrMpPatch, nop, 5, out lpNumberOfBytesWritten);
-                
+
                 byte[] mapReset = { 0x1 };
                 // sets map type
                 byte[] mapType = { 0, 0, 0, 0 };
@@ -263,11 +288,17 @@ namespace DarkLoader
         {
             if (!HaloIsRunning)
             {
-                ProcessStartInfo HaloOnline = new ProcessStartInfo();
-                HaloOnline.FileName = Application.StartupPath + @"\" + HaloOnlineEXE + ".exe";
-                HaloOnline.WorkingDirectory = Application.StartupPath;
-                HaloOnline.Arguments = "-window --account 123 --sign-in-code 123 -launcher";
-                Process.Start(HaloOnline);
+
+                HaloOnline = new System.Diagnostics.Process();
+                HaloOnline.StartInfo.FileName = Application.StartupPath + @"\" + HaloOnlineEXE + ".exe";
+                HaloOnline.StartInfo.WorkingDirectory = Application.StartupPath;
+                HaloOnline.StartInfo.Arguments = "-window --account 123 --sign-in-code 123 -launcher";
+
+                HaloOnline.Start();
+
+                Memory.SuspendProcess(HaloOnline.Id);
+                MagicPatches.RunStartupPatches();
+                Memory.ResumeProcess(HaloOnline.Id);
             }
             else
             {
@@ -280,109 +311,33 @@ namespace DarkLoader
             Process.Start("https://github.com/dark-c0de/DarkLoader/issues", "");
         }
 
-
-        IntPtr HudPatchAddr;
         private void btnHideHud_Click(object sender, EventArgs e)
         {
-            //TODO run these in threads
             btnHideHud.Text = "Scanning";
             btnHideHud.Enabled = false;
 
-            /*
-             * Halo Online Build Live_release_0.4.1.332089
-             * 
-             * Pattern for Hud Toggle
-             * F0 3F D9 5D 93 A8 E2 DD 83 3F 00
-             * 
-             * Replace E2 DD 83 3F with C3 F5 48 40 to hide hud
-             * Change it back to bring it back
-             */
-            if (HudPatchAddr == null || HudPatchAddr.ToInt32() <= 0)
-            {
-                HudPatchAddr = ScanForPattern(new byte[] { 0xF0, 0x3F, 0xD9, 0x5D, 0x93, 0xA8, 0xE2, 0xDD, 0x83, 0x3F, 0x00 }, "xxxxxxxxxxx", 6);
-                if (HudPatchAddr == null || HudPatchAddr.ToInt32() <= 0)
-                {
-                    //unsupported gmae
-                    //Original Halo Online - Eldewrito!
-                    // HudPatchAddr = _sigScan.FindPattern(new byte[] { 0x17, 0x56, 0x66, 0x89, 0x47, 0x02, 0xE8, 0x4C, 0xFB, 0xFF, 0xFF, 0x57, 0x53, 0x56 }, "xxxxx??????xxx", 7);
-                }
-                else
-                {
-                    //Nasty! Our pattern finds a bunch of locations, and we can't really tell which one is the correct one...
-                    //Ugh
-                    while (HudPatchAddr.ToInt32() > 0)
-                    {
-                        IntPtr p = Memory.OpenProcess(0x001F0FFF, true, HaloOnline.Id);
-                        byte[] HudPatch = { 0xC3, 0xF5, 0x48, 0x40 };
-                        Memory.WriteProtectedMemory(p, HudPatchAddr, HudPatch, 4);
-                        HudPatchAddr = ScanForPattern(new byte[] { 0xF0, 0x3F, 0xD9, 0x5D, 0x93, 0xA8, 0xE2, 0xDD, 0x83, 0x3F, 0x00 }, "xxxxxxxxxxx", 6);
+            MagicPatches.RunPatch("Hud Hide");
 
-                        //WriteProcessMemory(p, HudPatchAddr, HudPatch, 4, out lpNumberOfBytesWritten);
-                    }
-                }
-            }
             btnHideHud.Text = "Hide Hud";
             btnHideHud.Enabled = true;
-
         }
 
         private void btnShowHud_Click(object sender, EventArgs e)
         {
-            //TODO run these in threads
             btnShowHud.Text = "Scanning";
             btnShowHud.Enabled = false;
 
-            /*
-            * Halo Online Build Live_release_0.4.1.332089
-            * 
-            * Pattern for Hud Toggle
-            * F0 3F D9 5D 93 A8 E2 DD 83 3F 00
-            * 
-            * Replace E2 DD 83 3F with C3 F5 48 40 to hide hud
-            * Change it back to bring it back
-            */
-            if (HudPatchAddr == null || HudPatchAddr.ToInt32() <= 0)
-            {
-                HudPatchAddr = ScanForPattern(new byte[] { 0xF0, 0x3F, 0xD9, 0x5D, 0x93, 0xA8, 0xC3, 0xF5, 0x48, 0x40, 0x00 }, "xxxxxxxxxxx", 6);
-
-                if (HudPatchAddr == null || HudPatchAddr.ToInt32() <= 0)
-                {
-                    //unsupported gmae
-                    //Original Halo Online - Eldewrito!
-                    // HudPatchAddr = _sigScan.FindPattern(new byte[] { 0x17, 0x56, 0x66, 0x89, 0x47, 0x02, 0xE8, 0x4C, 0xFB, 0xFF, 0xFF, 0x57, 0x53, 0x56 }, "xxxxx??????xxx", 7);
-                }
-                else
-                {
-                    //Nasty! Our pattern finds a bunch of locations, and we can't really tell which one is the correct one...
-                    //Ugh
-                    while (HudPatchAddr.ToInt32() > 0)
-                    {
-                        IntPtr p = Memory.OpenProcess(0x001F0FFF, true, HaloOnline.Id);
-                        
-                        byte[] HudPatch = { 0xE2, 0xDD, 0x83, 0x3F };
-                        Memory.WriteProtectedMemory(p, HudPatchAddr, HudPatch, 4);
-                        
-                        HudPatchAddr = ScanForPattern(new byte[] { 0xF0, 0x3F, 0xD9, 0x5D, 0x93, 0xA8, 0xC3, 0xF5, 0x48, 0x40, 0x00 }, "xxxxxxxxxxx", 6);
-                    }
-                }
-            }
+            MagicPatches.RunPatch("Hud Show");
+            
             btnShowHud.Text = "Show Hud";
             btnShowHud.Enabled = true;
 
         }
 
-        //This returns an IntPtr of the address found from a byte pattern match.
-        public IntPtr ScanForPattern(byte[] pattern, string match, int offset)
+        private void btnPatchEditor_click(object sender, EventArgs e)
         {
-            IntPtr startOffset = HaloOnline.MainModule.BaseAddress;
-            IntPtr endOffset = IntPtr.Add(startOffset, HaloOnline.MainModule.ModuleMemorySize);
-
-            SigScan.Classes.SigScan _sigScan = new SigScan.Classes.SigScan();
-
-            _sigScan.Process = HaloOnline;
-            _sigScan.Address = startOffset;
-            _sigScan.Size = HaloOnline.MainModule.ModuleMemorySize;
-            return _sigScan.FindPattern(pattern, match, offset);
+            PatchEditor patchy = new PatchEditor();
+            patchy.Show();
         }
     }
 }
