@@ -13,82 +13,21 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SigScan.Classes;
 using System.Net;
-
 namespace DarkLoader
 {
     public partial class MainForm : Form
     {
-        bool WeRunningYup = false;
-        bool HaloIsRunning = false;
-        bool forceLoading = false;
-
-        string HaloOnlineEXE = "eldorado";
-
         Process HaloOnline;
 
         //Lets keep the previous scan in memory so only the first scan is slow.
         IntPtr pAddr;
         IntPtr MpPatchAddr;
 
-        [DllImport("kernel32.dll")]
-        public static extern bool VirtualProtectEx(
-            IntPtr hProcess,
-            uint dwAddress, //IntPtr lpAddress,
-            int nSize,      //UIntPtr dwSize,
-            uint flNewProtect,
-            out uint lpflOldProtect);
+        bool WeRunningYup = false;
+        bool HaloIsRunning = false;
+        bool forceLoading = false;
 
-        public enum Protection : uint
-        {
-            PAGE_NOACCESS = 0x01,
-            PAGE_READONLY = 0x02,
-            PAGE_READWRITE = 0x04,
-            PAGE_WRITECOPY = 0x08,
-            PAGE_EXECUTE = 0x10,
-            PAGE_EXECUTE_READ = 0x20,
-            PAGE_EXECUTE_READWRITE = 0x40,
-            PAGE_EXECUTE_WRITECOPY = 0x80,
-            PAGE_GUARD = 0x100,
-            PAGE_NOCACHE = 0x200,
-            PAGE_WRITECOMBINE = 0x400
-        }
-        public static bool WriteProtectedMemory(IntPtr hProcess, IntPtr dwAddress, byte[] patch, int dwSize)
-        {
-            uint old = (uint)Protection.PAGE_READONLY;
-            if (!VirtualProtectEx(hProcess, (uint)dwAddress, dwSize, (uint)Protection.PAGE_EXECUTE_READWRITE, out old))
-            {
-
-                return true;
-            }
-            int lpNumberOfBytesWritten;
-            WriteProcessMemory(hProcess, dwAddress, patch, dwSize, out lpNumberOfBytesWritten);
-            return false;
-        }
-
-        [DllImport("kernel32.dll")]
-        static extern bool ReadProcessMemory(
-            IntPtr hProcess,
-            IntPtr lpBaseAddress,
-            [Out] byte[] lpBuffer,
-            int dwSize,
-            out int lpNumberOfBytesRead
-        );
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        static extern bool WriteProcessMemory(
-            IntPtr hProcess,
-            IntPtr lpBaseAddress,
-            byte[] lpBuffer,
-            int nSize,
-            out int lpNumberOfBytesWritten);
-
-
-        [DllImport("kernel32.dll")]
-        public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
-
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool CloseHandle(IntPtr hObject);
+        string HaloOnlineEXE = "eldorado";
 
         public MainForm()
         {
@@ -222,19 +161,11 @@ namespace DarkLoader
             //Do Magic
             try
             {
-                IntPtr p = OpenProcess(0x001F0FFF, true, HaloOnline.Id);
+                IntPtr p = Memory.OpenProcess(0x001F0FFF, true, HaloOnline.Id);
 
                 if (pAddr == null || pAddr.ToInt32() == 0)
                 {
-                    IntPtr startOffset = HaloOnline.MainModule.BaseAddress;
-                    IntPtr endOffset = IntPtr.Add(startOffset, HaloOnline.MainModule.ModuleMemorySize);
-
-                    SigScan.Classes.SigScan _sigScan = new SigScan.Classes.SigScan();
-
-                    _sigScan.Process = HaloOnline;
-                    _sigScan.Address = startOffset;
-                    _sigScan.Size = HaloOnline.MainModule.ModuleMemorySize;
-                    pAddr = _sigScan.FindPattern(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x6D, 0x61, 0x70, 0x73, 0x5C, 0x6D, 0x61, 0x69, 0x6E, 0x6D, 0x65, 0x6E, 0x75 }, "xxxxxxxxxxxxxxxxxxxxx", 0);
+                    pAddr = ScanForPattern(new byte[] { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x6D, 0x61, 0x70, 0x73, 0x5C, 0x6D, 0x61, 0x69, 0x6E, 0x6D, 0x65, 0x6E, 0x75 }, "xxxxxxxxxxxxxxxxxxxxx", 0);
 
                     if (pAddr == null || pAddr.ToInt32() <= 0)
                     {
@@ -265,22 +196,14 @@ namespace DarkLoader
 
                 if (MpPatchAddr == null || MpPatchAddr.ToInt32() <= 0)
                 {
-                    IntPtr startOffset = HaloOnline.MainModule.BaseAddress;
-                    IntPtr endOffset = IntPtr.Add(startOffset, HaloOnline.MainModule.ModuleMemorySize);
-
-
                     //New builds of Halo Online
-                    SigScan.Classes.SigScan _sigScan = new SigScan.Classes.SigScan();
 
-                    _sigScan.Process = HaloOnline;
-                    _sigScan.Address = startOffset;
-                    _sigScan.Size = HaloOnline.MainModule.ModuleMemorySize;
-                    MpPatchAddr = _sigScan.FindPattern(new byte[] { 0x8B, 0xCE, 0x66, 0x89, 0x43, 0x02, 0xE8, 0x9E, 0x15, 0x00, 0x00, 0x8B, 0x47, 0x10 }, "xxxxx??????xxx", 7);
+                    MpPatchAddr = ScanForPattern(new byte[] { 0x8B, 0xCE, 0x66, 0x89, 0x43, 0x02, 0xE8, 0x9E, 0x15, 0x00, 0x00, 0x8B, 0x47, 0x10 }, "xxxxx??????xxx", 7);
 
                     if (MpPatchAddr == null || MpPatchAddr.ToInt32() <= 0)
                     {
                         //Original Halo Online - Eldewrito!
-                        MpPatchAddr = _sigScan.FindPattern(new byte[] { 0x17, 0x56, 0x66, 0x89, 0x47, 0x02, 0xE8, 0x4C, 0xFB, 0xFF, 0xFF, 0x57, 0x53, 0x56 }, "xxxxx??????xxx", 7);
+                        MpPatchAddr = ScanForPattern(new byte[] { 0x17, 0x56, 0x66, 0x89, 0x47, 0x02, 0xE8, 0x4C, 0xFB, 0xFF, 0xFF, 0x57, 0x53, 0x56 }, "xxxxx??????xxx", 7);
                     }
 
                     PtrMpPatch = MpPatchAddr - 0x1;
@@ -296,8 +219,8 @@ namespace DarkLoader
                 }
                 this.btnDarkLoad.Invoke(new MethodInvoker(delegate { btnDarkLoad.Text = "Patching"; }));
                 byte[] nop = { 0x90, 0x90, 0x90, 0x90, 0x90 };
-                WriteProcessMemory(p, PtrMpPatch, nop, 5, out lpNumberOfBytesWritten);
-
+                Memory.WriteProcessMemory(p, PtrMpPatch, nop, 5, out lpNumberOfBytesWritten);
+                
                 byte[] mapReset = { 0x1 };
                 // sets map type
                 byte[] mapType = { 0, 0, 0, 0 };
@@ -313,11 +236,11 @@ namespace DarkLoader
                     BitConverter.GetBytes(Convert.ToInt32(comboGameTypes.SelectedIndex)).CopyTo(gameType, 0);
                     Encoding.ASCII.GetBytes(listMapNames.SelectedItem.ToString()).CopyTo(mapName, 0);
                 }));
-                WriteProcessMemory(p, PtrGameType, gameType, 4, out lpNumberOfBytesWritten);
-                WriteProcessMemory(p, PtrMapType, mapType, 4, out lpNumberOfBytesWritten);
-                WriteProcessMemory(p, PtrMapName, mapName, mapName.Length, out lpNumberOfBytesWritten);
-                WriteProcessMemory(p, PtrMapTime, mapTime, 1, out lpNumberOfBytesWritten);
-                WriteProcessMemory(p, PtrMapReset, mapReset, 1, out lpNumberOfBytesWritten);
+                Memory.WriteProcessMemory(p, PtrGameType, gameType, 4, out lpNumberOfBytesWritten);
+                Memory.WriteProcessMemory(p, PtrMapType, mapType, 4, out lpNumberOfBytesWritten);
+                Memory.WriteProcessMemory(p, PtrMapName, mapName, mapName.Length, out lpNumberOfBytesWritten);
+                Memory.WriteProcessMemory(p, PtrMapTime, mapTime, 1, out lpNumberOfBytesWritten);
+                Memory.WriteProcessMemory(p, PtrMapReset, mapReset, 1, out lpNumberOfBytesWritten);
             }
             catch (Exception ex)
             {
@@ -376,17 +299,7 @@ namespace DarkLoader
              */
             if (HudPatchAddr == null || HudPatchAddr.ToInt32() <= 0)
             {
-                IntPtr startOffset = HaloOnline.MainModule.BaseAddress;
-                IntPtr endOffset = IntPtr.Add(startOffset, HaloOnline.MainModule.ModuleMemorySize);
-
-                SigScan.Classes.SigScan _sigScan = new SigScan.Classes.SigScan();
-
-                _sigScan.Process = HaloOnline;
-                _sigScan.Address = startOffset;
-                _sigScan.Size = HaloOnline.MainModule.ModuleMemorySize;
-
-                HudPatchAddr = _sigScan.FindPattern(new byte[] { 0xF0, 0x3F, 0xD9, 0x5D, 0x93, 0xA8, 0xE2, 0xDD, 0x83, 0x3F, 0x00 }, "xxxxxxxxxxx", 6);
-
+                HudPatchAddr = ScanForPattern(new byte[] { 0xF0, 0x3F, 0xD9, 0x5D, 0x93, 0xA8, 0xE2, 0xDD, 0x83, 0x3F, 0x00 }, "xxxxxxxxxxx", 6);
                 if (HudPatchAddr == null || HudPatchAddr.ToInt32() <= 0)
                 {
                     //unsupported gmae
@@ -399,15 +312,10 @@ namespace DarkLoader
                     //Ugh
                     while (HudPatchAddr.ToInt32() > 0)
                     {
-                        SigScan.Classes.SigScan _sigScanWhile = new SigScan.Classes.SigScan();
-
-                        _sigScanWhile.Process = HaloOnline;
-                        _sigScanWhile.Address = startOffset;
-                        _sigScanWhile.Size = HaloOnline.MainModule.ModuleMemorySize;
-                        IntPtr p = OpenProcess(0x001F0FFF, true, HaloOnline.Id);
+                        IntPtr p = Memory.OpenProcess(0x001F0FFF, true, HaloOnline.Id);
                         byte[] HudPatch = { 0xC3, 0xF5, 0x48, 0x40 };
-                        WriteProtectedMemory(p, HudPatchAddr, HudPatch, 4);
-                        HudPatchAddr = _sigScanWhile.FindPattern(new byte[] { 0xF0, 0x3F, 0xD9, 0x5D, 0x93, 0xA8, 0xE2, 0xDD, 0x83, 0x3F, 0x00 }, "xxxxxxxxxxx", 6);
+                        Memory.WriteProtectedMemory(p, HudPatchAddr, HudPatch, 4);
+                        HudPatchAddr = ScanForPattern(new byte[] { 0xF0, 0x3F, 0xD9, 0x5D, 0x93, 0xA8, 0xE2, 0xDD, 0x83, 0x3F, 0x00 }, "xxxxxxxxxxx", 6);
 
                         //WriteProcessMemory(p, HudPatchAddr, HudPatch, 4, out lpNumberOfBytesWritten);
                     }
@@ -435,15 +343,7 @@ namespace DarkLoader
             */
             if (HudPatchAddr == null || HudPatchAddr.ToInt32() <= 0)
             {
-                IntPtr startOffset = HaloOnline.MainModule.BaseAddress;
-                IntPtr endOffset = IntPtr.Add(startOffset, HaloOnline.MainModule.ModuleMemorySize);
-
-                SigScan.Classes.SigScan _sigScan = new SigScan.Classes.SigScan();
-
-                _sigScan.Process = HaloOnline;
-                _sigScan.Address = startOffset;
-                _sigScan.Size = HaloOnline.MainModule.ModuleMemorySize;
-                HudPatchAddr = _sigScan.FindPattern(new byte[] { 0xF0, 0x3F, 0xD9, 0x5D, 0x93, 0xA8, 0xC3, 0xF5, 0x48, 0x40, 0x00 }, "xxxxxxxxxxx", 6);
+                HudPatchAddr = ScanForPattern(new byte[] { 0xF0, 0x3F, 0xD9, 0x5D, 0x93, 0xA8, 0xC3, 0xF5, 0x48, 0x40, 0x00 }, "xxxxxxxxxxx", 6);
 
                 if (HudPatchAddr == null || HudPatchAddr.ToInt32() <= 0)
                 {
@@ -457,22 +357,32 @@ namespace DarkLoader
                     //Ugh
                     while (HudPatchAddr.ToInt32() > 0)
                     {
-                        SigScan.Classes.SigScan _sigScanWhile = new SigScan.Classes.SigScan();
-
-                        _sigScanWhile.Process = HaloOnline;
-                        _sigScanWhile.Address = startOffset;
-                        _sigScanWhile.Size = HaloOnline.MainModule.ModuleMemorySize;
-                        IntPtr p = OpenProcess(0x001F0FFF, true, HaloOnline.Id);
+                        IntPtr p = Memory.OpenProcess(0x001F0FFF, true, HaloOnline.Id);
+                        
                         byte[] HudPatch = { 0xE2, 0xDD, 0x83, 0x3F };
-
-                        WriteProtectedMemory(p, HudPatchAddr, HudPatch, 4);
-                        HudPatchAddr = _sigScanWhile.FindPattern(new byte[] { 0xF0, 0x3F, 0xD9, 0x5D, 0x93, 0xA8, 0xC3, 0xF5, 0x48, 0x40, 0x00 }, "xxxxxxxxxxx", 6);
+                        Memory.WriteProtectedMemory(p, HudPatchAddr, HudPatch, 4);
+                        
+                        HudPatchAddr = ScanForPattern(new byte[] { 0xF0, 0x3F, 0xD9, 0x5D, 0x93, 0xA8, 0xC3, 0xF5, 0x48, 0x40, 0x00 }, "xxxxxxxxxxx", 6);
                     }
                 }
             }
             btnShowHud.Text = "Show Hud";
             btnShowHud.Enabled = true;
 
+        }
+
+        //This returns an IntPtr of the address found from a byte pattern match.
+        public IntPtr ScanForPattern(byte[] pattern, string match, int offset)
+        {
+            IntPtr startOffset = HaloOnline.MainModule.BaseAddress;
+            IntPtr endOffset = IntPtr.Add(startOffset, HaloOnline.MainModule.ModuleMemorySize);
+
+            SigScan.Classes.SigScan _sigScan = new SigScan.Classes.SigScan();
+
+            _sigScan.Process = HaloOnline;
+            _sigScan.Address = startOffset;
+            _sigScan.Size = HaloOnline.MainModule.ModuleMemorySize;
+            return _sigScan.FindPattern(pattern, match, offset);
         }
     }
 }
