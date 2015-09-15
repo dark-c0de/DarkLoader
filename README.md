@@ -1,8 +1,9 @@
 # DarkLoader [![Build status](https://ci.appveyor.com/api/projects/status/evq3v5pgw6wxegi4?svg=true)](https://ci.appveyor.com/project/dark-c0de/darkloader)
 Halo Loader for all Halo Online Versions
 
-![DarkLoader](https://halo.click/jridZJ)
-
+![DarkLoader](https://halo.click/cUGY30)
+![PatchEditor](https://halo.click/fW4iY0)
+![MemoryViewer](https://halo.click/DqHdQ3)
 DarkLoader is a tool aimed to work with all builds of Halo Online to date, and future builds to come.
 
 Anyone is welcome to help work on DarkLoader, so please, please do! 
@@ -15,11 +16,14 @@ Please also leave a comment on the [Forum Thread](https://forum.halo.click/index
 * Live_release_8.1.373869 (July 20th, 2015)
 * Live_release_9.1.416138 (August 1st, 2015)
 * Live_release_10.1.430653 (August 7th, 2015)
-
+* Live_release_11.1.498295 (September 14th, 2015)
+* 
 ### Here's a feature list of what it can do right now:
 1. "DarkLoad" maps on every available gametype, and every map type. (Including Forge!), from every "known" build of Halo Online.
 2. A Halo Online Launcher button to launch the game.
 3. A list of maps available for the version of Halo Online you're running (Click them to load them).
+4. Hide, Show hud for every game.
+5. Pattern scan and create patterns and patches to share with other users (pull requests!)
 
 DarkLoader heavily relies on Pattern Scanning to support multiple versions of Halo Online. With the latest release of Halo Online "Live" build, they seemed to have randomized the memory in such a way that static address on your machine might not be in the same memory space as the same static address on other machines. 
 
