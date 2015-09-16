@@ -99,6 +99,10 @@ namespace DarkLoader
         private void FrostWatcher()
         {
             string FrostLogFile = Application.StartupPath + "/Frost/launcherUpdater.log";
+            if (File.Exists(FrostLogFile))
+            {
+                File.Delete(FrostLogFile);
+            }
             while (WeRunningYup)
             {
                 bool LaunchRequest = false;
@@ -381,6 +385,10 @@ namespace DarkLoader
                     Thread.Sleep(100);
                     if (File.Exists(gameShield))
                     {
+                        if (File.Exists(gameShield + ".nope"))
+                        {
+                            File.Delete(gameShield + ".nope");
+                        }
                         File.Move(gameShield, gameShield + ".nope");
                     }
                     HaloOnline = new System.Diagnostics.Process();
