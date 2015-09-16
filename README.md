@@ -1,7 +1,7 @@
 # DarkLoader [![Build status](https://ci.appveyor.com/api/projects/status/evq3v5pgw6wxegi4?svg=true)](https://ci.appveyor.com/project/dark-c0de/darkloader)
 Halo Loader for all Halo Online Versions.
 
-![DarkLoader](https://halo.click/cUGY30)
+![DarkLoader](https://halo.click/OBc7ik)
 ![PatchEditor](https://blam.halo.click/wl4hSg.png)
 ![MemoryViewer](https://halo.click/DqHdQ3)
 
