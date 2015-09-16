@@ -30,10 +30,11 @@
         {
             this.listPatches = new System.Windows.Forms.ListBox();
             this.grpScanBytes = new System.Windows.Forms.GroupBox();
+            this.lblPatternLength = new System.Windows.Forms.Label();
             this.btnFillX = new System.Windows.Forms.Button();
             this.txtPatternBytesSearch = new System.Windows.Forms.TextBox();
             this.btnPatchScanTest = new System.Windows.Forms.Button();
-            this.txtScanOffset = new System.Windows.Forms.TextBox();
+            this.txtPatternOffset = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -51,8 +52,11 @@
             this.txtPatchTitle = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.grpPatchResults = new System.Windows.Forms.GroupBox();
+            this.lblPatternResultCount = new System.Windows.Forms.Label();
             this.listPatternResults = new System.Windows.Forms.ListBox();
             this.grpPatch = new System.Windows.Forms.GroupBox();
+            this.btnClearPatch = new System.Windows.Forms.Button();
+            this.lblBytePatchLength = new System.Windows.Forms.Label();
             this.chkPatchBeforeStartup = new System.Windows.Forms.CheckBox();
             this.chkRunOnStartup = new System.Windows.Forms.CheckBox();
             this.txtBytesToPatch = new System.Windows.Forms.TextBox();
@@ -65,7 +69,9 @@
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.memoryViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.downloadLatestPatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.byteHexHelperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnClearPattern = new System.Windows.Forms.Button();
             this.grpScanBytes.SuspendLayout();
             this.grpPatchList.SuspendLayout();
             this.grpPatchInfo.SuspendLayout();
@@ -86,10 +92,12 @@
             // 
             // grpScanBytes
             // 
+            this.grpScanBytes.Controls.Add(this.btnClearPattern);
+            this.grpScanBytes.Controls.Add(this.lblPatternLength);
             this.grpScanBytes.Controls.Add(this.btnFillX);
             this.grpScanBytes.Controls.Add(this.txtPatternBytesSearch);
             this.grpScanBytes.Controls.Add(this.btnPatchScanTest);
-            this.grpScanBytes.Controls.Add(this.txtScanOffset);
+            this.grpScanBytes.Controls.Add(this.txtPatternOffset);
             this.grpScanBytes.Controls.Add(this.label6);
             this.grpScanBytes.Controls.Add(this.label5);
             this.grpScanBytes.Controls.Add(this.label4);
@@ -101,6 +109,15 @@
             this.grpScanBytes.TabIndex = 2;
             this.grpScanBytes.TabStop = false;
             this.grpScanBytes.Text = "Pattern Scan Bytes";
+            // 
+            // lblPatternLength
+            // 
+            this.lblPatternLength.AutoSize = true;
+            this.lblPatternLength.Location = new System.Drawing.Point(445, 9);
+            this.lblPatternLength.Name = "lblPatternLength";
+            this.lblPatternLength.Size = new System.Drawing.Size(42, 13);
+            this.lblPatternLength.TabIndex = 12;
+            this.lblPatternLength.Text = "0 Bytes";
             // 
             // btnFillX
             // 
@@ -117,25 +134,27 @@
             this.txtPatternBytesSearch.Location = new System.Drawing.Point(57, 24);
             this.txtPatternBytesSearch.Multiline = true;
             this.txtPatternBytesSearch.Name = "txtPatternBytesSearch";
+            this.txtPatternBytesSearch.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtPatternBytesSearch.Size = new System.Drawing.Size(432, 37);
             this.txtPatternBytesSearch.TabIndex = 9;
+            this.txtPatternBytesSearch.TextChanged += new System.EventHandler(this.txtPatternBytesSearch_TextChanged);
             // 
             // btnPatchScanTest
             // 
-            this.btnPatchScanTest.Location = new System.Drawing.Point(144, 96);
+            this.btnPatchScanTest.Location = new System.Drawing.Point(372, 98);
             this.btnPatchScanTest.Name = "btnPatchScanTest";
-            this.btnPatchScanTest.Size = new System.Drawing.Size(75, 23);
+            this.btnPatchScanTest.Size = new System.Drawing.Size(115, 23);
             this.btnPatchScanTest.TabIndex = 7;
             this.btnPatchScanTest.Text = "Test Pattern";
             this.btnPatchScanTest.UseVisualStyleBackColor = true;
             this.btnPatchScanTest.Click += new System.EventHandler(this.btnPatchScanTest_click);
             // 
-            // txtScanOffset
+            // txtPatternOffset
             // 
-            this.txtScanOffset.Location = new System.Drawing.Point(57, 98);
-            this.txtScanOffset.Name = "txtScanOffset";
-            this.txtScanOffset.Size = new System.Drawing.Size(81, 20);
-            this.txtScanOffset.TabIndex = 6;
+            this.txtPatternOffset.Location = new System.Drawing.Point(57, 98);
+            this.txtPatternOffset.Name = "txtPatternOffset";
+            this.txtPatternOffset.Size = new System.Drawing.Size(81, 20);
+            this.txtPatternOffset.TabIndex = 6;
             // 
             // label6
             // 
@@ -248,6 +267,7 @@
             this.txtPatchDescription.Location = new System.Drawing.Point(162, 32);
             this.txtPatchDescription.Multiline = true;
             this.txtPatchDescription.Name = "txtPatchDescription";
+            this.txtPatchDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtPatchDescription.Size = new System.Drawing.Size(496, 62);
             this.txtPatchDescription.TabIndex = 9;
             // 
@@ -294,6 +314,7 @@
             // 
             // grpPatchResults
             // 
+            this.grpPatchResults.Controls.Add(this.lblPatternResultCount);
             this.grpPatchResults.Controls.Add(this.listPatternResults);
             this.grpPatchResults.Enabled = false;
             this.grpPatchResults.Location = new System.Drawing.Point(720, 40);
@@ -303,17 +324,28 @@
             this.grpPatchResults.TabStop = false;
             this.grpPatchResults.Text = "Pattern Test Results";
             // 
+            // lblPatternResultCount
+            // 
+            this.lblPatternResultCount.AutoSize = true;
+            this.lblPatternResultCount.Location = new System.Drawing.Point(6, 259);
+            this.lblPatternResultCount.Name = "lblPatternResultCount";
+            this.lblPatternResultCount.Size = new System.Drawing.Size(51, 13);
+            this.lblPatternResultCount.TabIndex = 1;
+            this.lblPatternResultCount.Text = "0 Results";
+            // 
             // listPatternResults
             // 
             this.listPatternResults.FormattingEnabled = true;
             this.listPatternResults.Location = new System.Drawing.Point(6, 19);
             this.listPatternResults.Name = "listPatternResults";
-            this.listPatternResults.Size = new System.Drawing.Size(150, 251);
+            this.listPatternResults.Size = new System.Drawing.Size(150, 238);
             this.listPatternResults.TabIndex = 0;
             this.listPatternResults.SelectedIndexChanged += new System.EventHandler(this.listPatternResults_SelectedIndexChanged);
             // 
             // grpPatch
             // 
+            this.grpPatch.Controls.Add(this.btnClearPatch);
+            this.grpPatch.Controls.Add(this.lblBytePatchLength);
             this.grpPatch.Controls.Add(this.chkPatchBeforeStartup);
             this.grpPatch.Controls.Add(this.chkRunOnStartup);
             this.grpPatch.Controls.Add(this.txtBytesToPatch);
@@ -327,6 +359,25 @@
             this.grpPatch.TabIndex = 6;
             this.grpPatch.TabStop = false;
             this.grpPatch.Text = "Patch";
+            // 
+            // btnClearPatch
+            // 
+            this.btnClearPatch.Location = new System.Drawing.Point(291, 104);
+            this.btnClearPatch.Name = "btnClearPatch";
+            this.btnClearPatch.Size = new System.Drawing.Size(75, 23);
+            this.btnClearPatch.TabIndex = 14;
+            this.btnClearPatch.Text = "Clear";
+            this.btnClearPatch.UseVisualStyleBackColor = true;
+            this.btnClearPatch.Click += new System.EventHandler(this.btnClearPatch_Click);
+            // 
+            // lblBytePatchLength
+            // 
+            this.lblBytePatchLength.AutoSize = true;
+            this.lblBytePatchLength.Location = new System.Drawing.Point(445, 23);
+            this.lblBytePatchLength.Name = "lblBytePatchLength";
+            this.lblBytePatchLength.Size = new System.Drawing.Size(42, 13);
+            this.lblBytePatchLength.TabIndex = 13;
+            this.lblBytePatchLength.Text = "0 Bytes";
             // 
             // chkPatchBeforeStartup
             // 
@@ -355,6 +406,7 @@
             this.txtBytesToPatch.Name = "txtBytesToPatch";
             this.txtBytesToPatch.Size = new System.Drawing.Size(470, 40);
             this.txtBytesToPatch.TabIndex = 4;
+            this.txtBytesToPatch.TextChanged += new System.EventHandler(this.txtBytesToPatch_TextChanged);
             // 
             // btnTestPatchWrite
             // 
@@ -416,7 +468,8 @@
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.memoryViewerToolStripMenuItem,
-            this.downloadLatestPatchesToolStripMenuItem});
+            this.downloadLatestPatchesToolStripMenuItem,
+            this.byteHexHelperToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -435,12 +488,29 @@
             this.downloadLatestPatchesToolStripMenuItem.Text = "Download Latest Patches";
             this.downloadLatestPatchesToolStripMenuItem.Click += new System.EventHandler(this.downloadLatestPatchesToolStripMenuItem_Click);
             // 
+            // byteHexHelperToolStripMenuItem
+            // 
+            this.byteHexHelperToolStripMenuItem.Name = "byteHexHelperToolStripMenuItem";
+            this.byteHexHelperToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.byteHexHelperToolStripMenuItem.Text = "Byte Hex Helper";
+            this.byteHexHelperToolStripMenuItem.Click += new System.EventHandler(this.byteHexHelperToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
+            // 
+            // btnClearPattern
+            // 
+            this.btnClearPattern.Location = new System.Drawing.Point(291, 98);
+            this.btnClearPattern.Name = "btnClearPattern";
+            this.btnClearPattern.Size = new System.Drawing.Size(75, 23);
+            this.btnClearPattern.TabIndex = 15;
+            this.btnClearPattern.Text = "Clear";
+            this.btnClearPattern.UseVisualStyleBackColor = true;
+            this.btnClearPattern.Click += new System.EventHandler(this.btnClearPattern_Click);
             // 
             // PatchEditor
             // 
@@ -467,6 +537,7 @@
             this.grpPatchInfo.ResumeLayout(false);
             this.grpPatchInfo.PerformLayout();
             this.grpPatchResults.ResumeLayout(false);
+            this.grpPatchResults.PerformLayout();
             this.grpPatch.ResumeLayout(false);
             this.grpPatch.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
@@ -494,7 +565,7 @@
         private System.Windows.Forms.TextBox txtPatchTitle;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnPatchScanTest;
-        private System.Windows.Forms.TextBox txtScanOffset;
+        private System.Windows.Forms.TextBox txtPatternOffset;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
@@ -518,5 +589,11 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.CheckBox chkPatchBeforeStartup;
         private System.Windows.Forms.ToolStripMenuItem downloadLatestPatchesToolStripMenuItem;
+        private System.Windows.Forms.Label lblPatternLength;
+        private System.Windows.Forms.Label lblPatternResultCount;
+        private System.Windows.Forms.Label lblBytePatchLength;
+        private System.Windows.Forms.ToolStripMenuItem byteHexHelperToolStripMenuItem;
+        private System.Windows.Forms.Button btnClearPatch;
+        private System.Windows.Forms.Button btnClearPattern;
     }
 }

@@ -71,6 +71,30 @@
       "recursivePatch": false,
       "patchOnStartup": false,
       "patchBeforeStartup": false
+    },
+    {
+      "title": "Ingame Menu Text",
+      "author": "DARKC0DE",
+      "description": "Replaces \"INGAME MENU\" with \"DarkLoader\"",
+      "pattern": "49 00 4E 00 47 00 41 00 4D 00 45 00 20 00 4D 00 45 00 4E 00 55 00",
+      "match": "xxxxxxxxxxxxxxxxxxxxxx",
+      "offset": 0,
+      "patch": "44 00 61 00 72 00 6B 00 4C 00 6F 00 61 00 64 00 65 00 72 00 20 00",
+      "recursivePatch": false,
+      "patchOnStartup": true,
+      "patchBeforeStartup": false
+    },
+    {
+      "title": "Load Main Menu (Disabled)",
+      "author": "DARKC0DE",
+      "description": "This will force the main menu to load if the backend servers are offline. This may break loading the game if the servers are online however, so this patch is disabled by default. You can enable it by hitting \"Replace All Results\" and \"Run on Startup\"",
+      "pattern": "76 61 72 20 42 41 43 4B 45 4E 44 5F 53 45 53 53 49 4F 4E 5F 4F 46 46 4C 49 4E 45 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 3A 20 69 6E 74 20 20 20 20 3D 20 30 0D 0A 20 20 20 76 61 72 20 42 41 43 4B 45 4E 44 5F 53 45 53 53 49 4F 4E 5F 41 55 54 48 45 4E 54 49 43 41 54 49 4E 47 20 20 20 20 20 20 20 20 20 20 20 3A 20 69 6E 74 20 20 20 20 3D 20 31 0D 0A 20 20 20 76 61 72 20 42 41 43 4B 45 4E 44 5F 53 45 53 53 49 4F 4E 5F 45 53 54 41 42 4C 49 53 48 49 4E 47 20 20 20 20 20 20 20 20 20 20 20 20 20 3A 20 69 6E 74 20 20 20 20 3D 20 32 0D 0A 20 20 20 76 61 72 20 42 41 43 4B 45 4E 44 5F 53 45 53 53 49 4F 4E 5F 4F 4E 4C 49 4E 45 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 3A 20 69 6E 74 20 20 20 20 3D 20 33",
+      "match": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "offset": 0,
+      "patch": "76 61 72 20 42 41 43 4B 45 4E 44 5F 53 45 53 53 49 4F 4E 5F 4F 46 46 4C 49 4E 45 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 3A 20 69 6E 74 20 20 20 20 3D 20 33 0D 0A 20 20 20 76 61 72 20 42 41 43 4B 45 4E 44 5F 53 45 53 53 49 4F 4E 5F 41 55 54 48 45 4E 54 49 43 41 54 49 4E 47 20 20 20 20 20 20 20 20 20 20 20 3A 20 69 6E 74 20 20 20 20 3D 20 31 0D 0A 20 20 20 76 61 72 20 42 41 43 4B 45 4E 44 5F 53 45 53 53 49 4F 4E 5F 45 53 54 41 42 4C 49 53 48 49 4E 47 20 20 20 20 20 20 20 20 20 20 20 20 20 3A 20 69 6E 74 20 20 20 20 3D 20 32 0D 0A 20 20 20 76 61 72 20 42 41 43 4B 45 4E 44 5F 53 45 53 53 49 4F 4E 5F 4F 4E 4C 49 4E 45 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 20 3A 20 69 6E 74 20 20 20 20 3D 20 30",
+      "recursivePatch": false,
+      "patchOnStartup": false,
+      "patchBeforeStartup": false
     }
   ]
 }

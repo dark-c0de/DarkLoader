@@ -61,40 +61,49 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileVersions.cs" />
+    <Compile Include="Forms\HexHelper.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\HexHelper.Designer.cs">
+      <DependentUpon>HexHelper.cs</DependentUpon>
+    </Compile>
     <Compile Include="GoogleAnalyticsApi.cs" />
     <Compile Include="LogFile.cs" />
     <Compile Include="MagicPatches.cs" />
     <Compile Include="HelperFunctions.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="Forms\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Memory.cs" />
-    <Compile Include="MemoryView.cs">
+    <Compile Include="Forms\MemoryView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MemoryView.Designer.cs">
+    <Compile Include="Forms\MemoryView.Designer.cs">
       <DependentUpon>MemoryView.cs</DependentUpon>
     </Compile>
-    <Compile Include="PatchEditor.cs">
+    <Compile Include="Forms\PatchEditor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PatchEditor.Designer.cs">
+    <Compile Include="Forms\PatchEditor.Designer.cs">
       <DependentUpon>PatchEditor.cs</DependentUpon>
     </Compile>
     <Compile Include="PatternScanner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="Forms\HexHelper.resx">
+      <DependentUpon>HexHelper.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="MemoryView.resx">
+    <EmbeddedResource Include="Forms\MemoryView.resx">
       <DependentUpon>MemoryView.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PatchEditor.resx">
+    <EmbeddedResource Include="Forms\PatchEditor.resx">
       <DependentUpon>PatchEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

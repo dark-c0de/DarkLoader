@@ -148,7 +148,7 @@ namespace DarkLoader
         //This will apply a patch to all patch results
         public static bool PatchRecursive(Patch patch)
         {
-            LogFile.WriteToLog("Starting recusive memory patch for " + patch.title);
+            LogFile.WriteToLog("Starting recursive memory patch for " + patch.title);
             byte[] patchBytes = HelperFunctions.StringToByteArray(patch.patch);
             byte[] patternBytes = HelperFunctions.StringToByteArray(patch.pattern);
             IntPtr p = Memory.OpenProcess(0x001F0FFF, true, MainForm.HaloOnline.Id);

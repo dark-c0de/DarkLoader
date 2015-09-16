@@ -97,6 +97,7 @@ namespace DarkLoader
                 checkUpdates.Start();
             }
         }
+        bool inLauncherLoop = false;
         private void FrostWatcher()
         {
             string FrostLogFile = Application.StartupPath + "/Frost/launcherUpdater.log";
@@ -106,45 +107,76 @@ namespace DarkLoader
             }
             while (WeRunningYup)
             {
-                bool LaunchRequest = false;
-                if (File.Exists(FrostLogFile))
+                try
                 {
-                    var forstProcessess = Process.GetProcesses().Where(pr => pr.ProcessName.Contains("frost"));
+                    bool LaunchRequest = false;
+                    if (File.Exists(FrostLogFile))
+                    {
+                        var forstProcessess = Process.GetProcesses().Where(pr => pr.ProcessName.Contains("frost"));
 
-                    foreach (var process in forstProcessess)
-                    {
-                        process.WaitForExit();
-                    }
-                    string FrostLog = File.ReadAllText(FrostLogFile);
-                    File.Delete(FrostLogFile+"-DarkBackup.log");
-                    File.Move(FrostLogFile,FrostLogFile+"-DarkBackup.log");
-                    
-                    if (FrostLog != "")
-                    {
-                        string launchOptions = FrostLog.Split(new[] { '\r', '\n' }).FirstOrDefault().Split(new[] { "halo_online.exe" }, StringSplitOptions.None)[1];
-                        this.Invoke(new MethodInvoker(delegate
+                        foreach (var process in forstProcessess)
                         {
-                            txt4gameArguments.Text = launchOptions;
-                        }));
-                        LaunchRequest = true;
-                    }
-                }
-                Thread.Sleep(150);
-                var haloProcesses = Process.GetProcesses().Where(pr => pr.ProcessName.Contains("halo"));
+                            process.WaitForExit();
+                        }
+                        string FrostLog = File.ReadAllText(FrostLogFile);
+                        File.Delete(FrostLogFile + "-DarkBackup.log");
+                        File.Move(FrostLogFile, FrostLogFile + "-DarkBackup.log");
 
-                foreach (var process in haloProcesses)
-                {
-                    process.Kill();
-                }
-                if (LaunchRequest)
-                {
-                    DialogResult dialogResult = MessageBox.Show("DarkLoader has detected a 4game startup request. Want to start Halo Online?", "Let's play!", MessageBoxButtons.YesNo);
-                    if (dialogResult == DialogResult.Yes)
+                        if (FrostLog != "")
+                        {
+                            string launchOptions = FrostLog.Split(new[] { '\r', '\n' }).FirstOrDefault().Split(new[] { "halo_online.exe" }, StringSplitOptions.None)[1];
+                            this.Invoke(new MethodInvoker(delegate
+                            {
+                                txt4gameArguments.Text = launchOptions;
+                            }));
+                            LaunchRequest = true;
+                        }
+                    }
+                    if (LaunchRequest)
                     {
-                        GoogleAnalyticsApi.TrackEvent("MainForm.cs", "FrostWatcher", "Started Halo Online from 4game");
-                        LaunchHaloOnline();
+                        inLauncherLoop = true;
+                        Thread launcherLoop = new Thread(KillFrostLauncherLoop);
+                        launcherLoop.Start();
+                        DialogResult dialogResult = MessageBox.Show("DarkLoader has detected a 4game startup request. Want to start Halo Online?", "Let's play!", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            GoogleAnalyticsApi.TrackEvent("MainForm.cs", "FrostWatcher", "Started Halo Online from 4game");
+                            LaunchHaloOnline();
+                        }
+                        inLauncherLoop = false;
                     }
                 }
+                catch (Exception e)
+                {
+                    GoogleAnalyticsApi.TrackEvent("Errors", "FrostWatcher", e.Message);
+                }
+            }
+        }
+        private void KillFrostLauncherLoop()
+        {
+            while (inLauncherLoop)
+            {
+                try
+                {
+                    var haloProcesses = Process.GetProcesses().Where(pr => pr.ProcessName.Contains("halo"));
+
+                    foreach (var process in haloProcesses)
+                    {
+                        process.Kill();
+                    }
+
+                    haloProcesses = Process.GetProcesses().Where(pr => pr.ProcessName.Contains("Halo"));
+
+                    foreach (var process in haloProcesses)
+                    {
+                        process.Kill();
+                    }
+                }
+                catch (Exception)
+                {
+
+                }
+                Thread.Sleep(10);
             }
         }
         private void CheckForUpdates()
@@ -400,6 +432,7 @@ namespace DarkLoader
 
                     HaloOnline.Start();
 
+                    Thread.Sleep(3000);
                     Memory.SuspendProcess(HaloOnline.Id);
                     MagicPatches.RunStartupPatches();
                     Memory.ResumeProcess(HaloOnline.Id);

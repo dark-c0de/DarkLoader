@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using DarkLoader.Forms;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace DarkLoader
             IntPtr PatchReturnAddress;
             byte[] searchBytePattern = HelperFunctions.StringToByteArray(txtPatternBytesSearch.Text);
             string match = txtPatternMatch.Text;
-            int offset = Convert.ToInt32(txtScanOffset.Text);
+            int offset = Convert.ToInt32(txtPatternOffset.Text);
             PatchReturnAddress = MagicPatches.ScanForPattern(MainForm.HaloOnline, searchBytePattern, match, offset);
 
             if (PatchReturnAddress == null || PatchReturnAddress.ToInt32() <= 0)
@@ -86,6 +87,7 @@ namespace DarkLoader
             {
                 MemoryView.LoadMemoryView();
             }
+            lblPatternResultCount.Text = listPatternResults.Items.Count.ToString() + " Results";
         }
 
         private void PatchEditor_Load(object sender, EventArgs e)
@@ -137,7 +139,7 @@ namespace DarkLoader
                 description = txtPatchDescription.Text,
                 pattern = txtPatternBytesSearch.Text,
                 match = txtPatternMatch.Text,
-                offset = Convert.ToInt32(txtScanOffset.Text),
+                offset = Convert.ToInt32(txtPatternOffset.Text),
                 patch = txtBytesToPatch.Text,
                 recursivePatch = chkPatchReplaceAll.Checked,
                 patchOnStartup = chkRunOnStartup.Checked,
@@ -163,7 +165,7 @@ namespace DarkLoader
                     txtPatchDescription.Text = patches.PatchList[index].description;
                     txtPatternBytesSearch.Text = patches.PatchList[index].pattern;
                     txtPatternMatch.Text = patches.PatchList[index].match;
-                    txtScanOffset.Text = patches.PatchList[index].offset.ToString();
+                    txtPatternOffset.Text = patches.PatchList[index].offset.ToString();
                     txtBytesToPatch.Text = patches.PatchList[index].patch;
                     chkPatchReplaceAll.Checked = patches.PatchList[index].recursivePatch;
                     chkRunOnStartup.Checked = patches.PatchList[index].patchOnStartup;
@@ -189,7 +191,7 @@ namespace DarkLoader
             txtPatchDescription.Text = "";
             txtPatternBytesSearch.Text = "";
             txtPatternMatch.Text = "";
-            txtScanOffset.Text = "0";
+            txtPatternOffset.Text = "0";
             txtBytesToPatch.Text = "";
             chkPatchReplaceAll.Checked = false;
             chkRunOnStartup.Checked = false;
@@ -254,7 +256,7 @@ namespace DarkLoader
                     description = txtPatchDescription.Text,
                     pattern = txtPatternBytesSearch.Text,
                     match = txtPatternMatch.Text,
-                    offset = Convert.ToInt32(txtScanOffset.Text),
+                    offset = Convert.ToInt32(txtPatternOffset.Text),
                     patch = txtBytesToPatch.Text,
                     recursivePatch = chkPatchReplaceAll.Checked,
                     patchOnStartup = chkRunOnStartup.Checked,
@@ -334,6 +336,60 @@ namespace DarkLoader
         {
             GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "PatchEditor_FormClosing", "");
             FormShowing = false;
+        }
+
+        private void txtPatternBytesSearch_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                byte[] searchBytePattern = HelperFunctions.StringToByteArray(txtPatternBytesSearch.Text);
+                lblPatternLength.Text = searchBytePattern.Length.ToString() + " Bytes";
+            }
+            catch(Exception)
+            {
+                lblPatternLength.Text = "Not valid";
+            }
+        }
+
+        private void txtBytesToPatch_TextChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                byte[] patchBytes = HelperFunctions.StringToByteArray(txtBytesToPatch.Text);
+                lblBytePatchLength.Text = patchBytes.Length.ToString() + " Bytes";
+            }
+            catch (Exception)
+            {
+                lblBytePatchLength.Text = "Not valid";
+            }
+        }
+        HexHelper helper;
+        private void byteHexHelperToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!HexHelper.FormShowing)
+            {
+                helper = new HexHelper();
+                helper.Show();
+            }
+            else
+            {
+                helper.Focus();
+            }
+        }
+
+        private void btnClearPatch_Click(object sender, EventArgs e)
+        {
+            chkPatchBeforeStartup.Checked = false;
+            chkPatchReplaceAll.Checked = false;
+            chkRunOnStartup.Checked = false;
+            txtBytesToPatch.Text = "";
+        }
+
+        private void btnClearPattern_Click(object sender, EventArgs e)
+        {
+            txtPatternBytesSearch.Text = "";
+            txtPatternMatch.Text = "";
+            txtPatternOffset.Text = "";
         }
     }
 }
