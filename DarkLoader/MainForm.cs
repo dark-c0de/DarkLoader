@@ -352,12 +352,21 @@ namespace DarkLoader
 
         private void btnLaunchHaloOnline_Click(object sender, EventArgs e)
         {
+            btnLaunchHaloOnline.Enabled = false;
+            btnLaunchHaloOnline.Text = "Launching...";
             GoogleAnalyticsApi.TrackEvent("MainForm.cs", "btnLaunchHaloOnline_Click", "");
             Thread startHalo = new Thread(LaunchHaloOnline);
             startHalo.Start();
         }
         private void LaunchHaloOnline()
         {
+            var darkLoadedProcesses = Process.GetProcesses().Where(pr => pr.ProcessName.Contains("darkloaded"));
+
+            foreach (var process in darkLoadedProcesses)
+            {
+                process.Kill();
+                process.WaitForExit();
+            }
             if (!HaloIsRunning)
             {
                 try
@@ -365,10 +374,15 @@ namespace DarkLoader
                     byte[] HaloExeBytes = File.ReadAllBytes(Application.StartupPath + @"\" + HaloOnlineEXE + ".exe");
 
                     string tmpExe = Path.Combine(Application.StartupPath, "darkloaded.exe");
+                    string gameShield = Path.Combine(Application.StartupPath, "gameShieldDll.dll");
                     MagicPatches.ExePatches(HaloExeBytes);
 
                     File.WriteAllBytes(tmpExe, HaloExeBytes);
                     Thread.Sleep(100);
+                    if (File.Exists(gameShield))
+                    {
+                        File.Move(gameShield, gameShield + ".nope");
+                    }
                     HaloOnline = new System.Diagnostics.Process();
                     HaloOnline.StartInfo.FileName = tmpExe;
                     HaloOnline.StartInfo.WorkingDirectory = Application.StartupPath;
@@ -383,7 +397,7 @@ namespace DarkLoader
                 catch (Exception e)
                 {
                     GoogleAnalyticsApi.TrackEvent("MainForm.cs", "LaunchHaloOnline", e.Message);
-                    MessageBox.Show("Failed to start Halo Online!", "Something bad happened.");
+                    MessageBox.Show("Failed to start Halo Online!\n\n" + e.Message, "Something bad happened.");
                 }
             }
             else
@@ -391,6 +405,11 @@ namespace DarkLoader
                 GoogleAnalyticsApi.TrackEvent("MainForm.cs", "LaunchHaloOnline", "Halo Already Running");
                 MessageBox.Show("Halo Online is already running!", "DarkLoader uh...");
             }
+            this.Invoke(new MethodInvoker(delegate
+                       {
+                           btnLaunchHaloOnline.Enabled = true;
+                           btnLaunchHaloOnline.Text = "Launch Halo Online";
+                       }));
         }
 
         private void btnIssues_Click(object sender, EventArgs e)
