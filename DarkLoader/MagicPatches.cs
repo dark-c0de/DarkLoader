@@ -82,7 +82,9 @@ namespace DarkLoader
         //TODO: Add pattern scanning functionality.
         public static void ExePatches(byte[] bytes)
         {
-            foreach (var patch in LoadedPatches.PatchList.FindAll(patch => patch.patchOnStartup == true))
+            LogFile.WriteToLog("Starting ExePatches");
+
+            foreach (var patch in LoadedPatches.PatchList.FindAll(patch => patch.patchBeforeStartup == true))
             {
                 byte[] patchBytes = HelperFunctions.StringToByteArray(patch.patch);
                 byte[] patchPattern = HelperFunctions.StringToByteArray(patch.pattern);
@@ -91,10 +93,12 @@ namespace DarkLoader
                 if (result > 0)
                 {
                     Buffer.BlockCopy(patchBytes, 0, bytes, result + patch.offset, patchBytes.Length);
+                    LogFile.WriteToLog("Exe Patch (" + patch.title + ") found and patched at " + (result + patch.offset).ToString("X"));
                     result = Convert.ToInt32(IndexOfBytes(bytes, patchPattern, patch.match));
                     while (patch.recursivePatch && result > 0)
                     {
                         Buffer.BlockCopy(patchBytes, 0, bytes, result + patch.offset, patchBytes.Length);
+                        LogFile.WriteToLog("Recursive Exe Patch (" + patch.title + ") found and patched at " + (result + patch.offset).ToString("X"));
                         result = Convert.ToInt32(IndexOfBytes(bytes, patchPattern, patch.match));
                     }
                 }
@@ -144,6 +148,7 @@ namespace DarkLoader
         //This will apply a patch to all patch results
         public static bool PatchRecursive(Patch patch)
         {
+            LogFile.WriteToLog("Starting recusive memory patch for " + patch.title);
             byte[] patchBytes = HelperFunctions.StringToByteArray(patch.patch);
             byte[] patternBytes = HelperFunctions.StringToByteArray(patch.pattern);
             IntPtr p = Memory.OpenProcess(0x001F0FFF, true, MainForm.HaloOnline.Id);
@@ -161,6 +166,7 @@ namespace DarkLoader
                 while (PatchReturnAddress.ToInt32() > 0)
                 {
                     Memory.WriteProtectedMemory(p, PatchReturnAddress, patchBytes, patchBytes.Length);
+                    LogFile.WriteToLog("Recursive Memory Patch (" + patch.title + ") found and patched at " + PatchReturnAddress.ToString("X"));
                     patched = true;
                     IntPtr startOffset = PatchReturnAddress + 0x1;
                     PatchReturnAddress = MagicPatches.ScanForPattern(MainForm.HaloOnline, patternBytes, patch.match, patch.offset, startOffset);
@@ -186,6 +192,7 @@ namespace DarkLoader
             else
             {
                 Memory.WriteProtectedMemory(p, PatchReturnAddress, patchBytes, patchBytes.Length);
+                LogFile.WriteToLog("Memory Patch (" + patch.title + ") found and patched at " + PatchReturnAddress.ToString("X"));
                 return true;
             }
         }

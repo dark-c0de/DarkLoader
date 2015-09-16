@@ -38,6 +38,7 @@ namespace DarkLoader
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            LogFile.WriteToLog("------------- Started DarkLoader -------------");
             GoogleAnalyticsApi.TrackEvent("MainForm.cs", "MainForm_Load", "");
             Thread loadPatches = new Thread(MagicPatches.LoadPatches);
             loadPatches.Start();
@@ -379,6 +380,7 @@ namespace DarkLoader
 
                     string tmpExe = Path.Combine(Application.StartupPath, "darkloaded.exe");
                     string gameShield = Path.Combine(Application.StartupPath, "gameShieldDll.dll");
+                    
                     MagicPatches.ExePatches(HaloExeBytes);
 
                     File.WriteAllBytes(tmpExe, HaloExeBytes);

@@ -90,6 +90,7 @@ namespace DarkLoader
 
         private void PatchEditor_Load(object sender, EventArgs e)
         {
+            LogFile.WriteToLog("------------ Loaded PatchEditor ------------");
             FormShowing = true;
             GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "PatchEditor_Load", "");
             lblStatusBar.Text = "Loading Patches....";
@@ -215,7 +216,9 @@ namespace DarkLoader
             GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "WritePatchesToDisk", "");
             string jsonPatch = JsonConvert.SerializeObject(patches, Formatting.Indented);
             File.WriteAllText(Program.PatchFile, jsonPatch);
-            LoadPatches();
+            LoadPatches(); //reload patches in tag editor
+            Thread loadPatches = new Thread(MagicPatches.LoadPatches); //reload patches in main app
+            loadPatches.Start();
             lblStatusBar.Text = "Patches Saved";
         }
 

@@ -23,6 +23,7 @@ namespace DarkLoader
         
         private void MemoryView_Load(object sender, EventArgs e)
         {
+            LogFile.WriteToLog("------------ Loaded Memory View ------------");
             GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "MemoryView_Load", "");
             FormShowing = true;
             bv = new ByteViewer();
