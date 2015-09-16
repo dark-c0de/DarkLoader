@@ -25,18 +25,6 @@
       "patchBeforeStartup": false
     },
     {
-      "title": "Tag Patch 1",
-      "author": "DARKC0DE",
-      "description": "This patch is 1 of 3 needed for allowing tag edits.",
-      "pattern": "84 C0 75 1C 8D 85 F4 FE FF FF 68 0C 8D 16 01 50 E8",
-      "match": "xxxxxx?xxxx???xxx",
-      "offset": 3,
-      "patch": "0xEB",
-      "recursivePatch": false,
-      "patchOnStartup": false,
-      "patchBeforeStartup": true
-    },
-    {
       "title": "Language Patch - English 2",
       "author": "DARKC0DE",
       "description": "Second English language patch for latest Halo Online builds.",
@@ -71,6 +59,18 @@
       "recursivePatch": true,
       "patchOnStartup": false,
       "patchBeforeStartup": true
+    },
+    {
+      "title": "Tag Patch 1 (Disabled)",
+      "author": "DARKC0DE",
+      "description": "This patch is 1 of 3 needed for allowing tag edits. This patch works, but it crashes the game because the other two patches still need patched.\r\nPatch(\"TagEdits1\", 0x501A5B, { 0xEB }), (This is done, this is the patch you're looking at)\r\nPatch(\"TagEdits2\", 0x502874, 0x90, 2), (This needs found still)\r\nPatch(\"TagEdits3\", 0x5030AA, 0x90, 2), (This needs found still)",
+      "pattern": "84 C0 75 1C 8D 85",
+      "match": "xxxxxx",
+      "offset": 0,
+      "patch": "EB",
+      "recursivePatch": false,
+      "patchOnStartup": false,
+      "patchBeforeStartup": false
     }
   ]
 }
