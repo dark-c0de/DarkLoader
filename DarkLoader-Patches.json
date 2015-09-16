@@ -32,6 +32,28 @@
       "patch": "44 61 72 6B 4C 6F 61 64 65 72 20 47 61 6D 65 20 43 6C 69 65 6E 74 20",
       "recursivePatch": true,
       "patchOnStartup": true
+    },
+    {
+      "title": "Language Patch - English 1",
+      "author": "DARKC0DE",
+      "description": "First English language patch for latest Halo Online builds.",
+      "pattern": "0B 74 2F C7 05",
+      "match": "xxxxx",
+      "offset": 0,
+      "patch": "00",
+      "recursivePatch": false,
+      "patchOnStartup": true
+    },
+    {
+      "title": "Language Patch - English 2",
+      "author": "DARKC0DE",
+      "description": "Second English language patch for latest Halo Online builds.",
+      "pattern": "74 2F C7 05",
+      "match": "xxxx",
+      "offset": 9,
+      "patch": "00",
+      "recursivePatch": false,
+      "patchOnStartup": true
     }
   ]
 }
