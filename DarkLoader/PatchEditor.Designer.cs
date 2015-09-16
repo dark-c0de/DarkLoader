@@ -65,6 +65,8 @@
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.memoryViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chkPatchBeforeStartup = new System.Windows.Forms.CheckBox();
+            this.downloadLatestPatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grpScanBytes.SuspendLayout();
             this.grpPatchList.SuspendLayout();
             this.grpPatchInfo.SuspendLayout();
@@ -313,6 +315,7 @@
             // 
             // grpPatch
             // 
+            this.grpPatch.Controls.Add(this.chkPatchBeforeStartup);
             this.grpPatch.Controls.Add(this.chkRunOnStartup);
             this.grpPatch.Controls.Add(this.txtBytesToPatch);
             this.grpPatch.Controls.Add(this.btnTestPatchWrite);
@@ -413,7 +416,8 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.memoryViewerToolStripMenuItem});
+            this.memoryViewerToolStripMenuItem,
+            this.downloadLatestPatchesToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "Tools";
@@ -431,6 +435,23 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
+            // 
+            // chkPatchBeforeStartup
+            // 
+            this.chkPatchBeforeStartup.AutoSize = true;
+            this.chkPatchBeforeStartup.Location = new System.Drawing.Point(111, 85);
+            this.chkPatchBeforeStartup.Name = "chkPatchBeforeStartup";
+            this.chkPatchBeforeStartup.Size = new System.Drawing.Size(149, 17);
+            this.chkPatchBeforeStartup.TabIndex = 6;
+            this.chkPatchBeforeStartup.Text = "Patch EXE Before Startup";
+            this.chkPatchBeforeStartup.UseVisualStyleBackColor = true;
+            // 
+            // downloadLatestPatchesToolStripMenuItem
+            // 
+            this.downloadLatestPatchesToolStripMenuItem.Name = "downloadLatestPatchesToolStripMenuItem";
+            this.downloadLatestPatchesToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+            this.downloadLatestPatchesToolStripMenuItem.Text = "Download Latest Patches";
+            this.downloadLatestPatchesToolStripMenuItem.Click += new System.EventHandler(this.downloadLatestPatchesToolStripMenuItem_Click);
             // 
             // PatchEditor
             // 
@@ -506,5 +527,7 @@
         private System.Windows.Forms.ToolStripMenuItem toolsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem memoryViewerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.CheckBox chkPatchBeforeStartup;
+        private System.Windows.Forms.ToolStripMenuItem downloadLatestPatchesToolStripMenuItem;
     }
 }

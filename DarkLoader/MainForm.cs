@@ -41,17 +41,7 @@ namespace DarkLoader
             Thread loadPatches = new Thread(MagicPatches.LoadPatches);
             loadPatches.Start();
             WeRunningYup = true;
-            /*
-            if (!File.Exists("DarkLoader-PatchList.json"))
-            {
-                MessageBox.Show("Can't find DarkLoader-PatchList.json, closing.");
-                Application.Exit();
-                return;
-            }
 
-            string patchList = File.ReadAllText("DarkLoader-PatchList.json");
-            BytePatcher Patches = JsonConvert.DeserializeObject<BytePatcher>(patchList);
-            */
             //Set Default Game Mode combo boxes to 
             comboGameModes.SelectedIndex = 2;
             comboGameTypes.SelectedIndex = 0;
@@ -103,11 +93,14 @@ namespace DarkLoader
         }
         private void CheckForUpdates()
         {
-            var url = "https://halowiki.llf.to/darkloader/latest.txt";
+            var url = "https://raw.githubusercontent.com/dark-c0de/DarkLoader/master/DarkLoader-Versions.json";
             try
             {
-                var versionString = (new WebClient()).DownloadString(url);
-                Version newVersion = Version.Parse(versionString);
+                var versionJson = (new WebClient()).DownloadString(url);
+                FileVersions.NewFiles = JsonConvert.DeserializeObject<FileVersions.Files>(versionJson);
+                FileVersions.OldFiles = JsonConvert.DeserializeObject<FileVersions.Files>(File.ReadAllText("DarkLoader-Versions.json"));
+                FileVersions.File file = FileVersions.FindNewByFilename("DarkLoader.exe");
+                Version newVersion = Version.Parse(file.version);
                 Version currentVersion = Version.Parse(Application.ProductVersion);
                 if (currentVersion < newVersion)
                 {
@@ -116,7 +109,24 @@ namespace DarkLoader
                     DialogResult result1 = MessageBox.Show("There's a new version of DarkLoader available. Would you like to download it?", "Oh goody!", MessageBoxButtons.YesNo);
                     if (result1 == DialogResult.Yes)
                     {
-                        Process.Start("https://github.com/dark-c0de/DarkLoader/releases", "");
+                        Process.Start(file.url);
+                    }
+                }
+
+                FileVersions.File patchesNew = FileVersions.FindNewByFilename("DarkLoader-Patches.json");
+                FileVersions.File patchesOld = FileVersions.FindOldByFilename("DarkLoader-Patches.json");
+
+                if (Convert.ToInt32(patchesNew.version) > Convert.ToInt32(patchesOld.version))
+                {
+                    DialogResult result1 = MessageBox.Show("There's new patches available for DarkLoader. Would you like to download them?", "Oh goody!", MessageBoxButtons.YesNo);
+                    if (result1 == DialogResult.Yes)
+                    {
+                        DialogResult dialogResult = MessageBox.Show("Are you sure you want to download the latest Patch File? This will overwrite any changes you've made! If you haven't made any, you'll be fine. If you have, please backup your changes before hitting OK.", "Replace Patches?", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            Program.GetLatestPatchJson(true);
+                            
+                        }
                     }
                 }
             }
@@ -126,7 +136,6 @@ namespace DarkLoader
         {
             while (WeRunningYup)
             {
-               // HaloOnline = Process.GetProcessesByName(HaloOnlineEXE).FirstOrDefault();
                 try
                 {
                     if (!HaloOnline.HasExited)
@@ -157,7 +166,6 @@ namespace DarkLoader
         {
             Process.Start("https://forum.halo.click/index.php?/topic/234-program-darkloader/", "");
         }
-
 
         IntPtr PtrMapName;
         IntPtr PtrMapReset;
@@ -288,14 +296,22 @@ namespace DarkLoader
         {
             if (!HaloIsRunning)
             {
+                byte[] HaloExeBytes = File.ReadAllBytes(Application.StartupPath + @"\" + HaloOnlineEXE + ".exe");
+
+
+                string tmpExe = Path.Combine(Path.GetTempPath(), "_tmpdarkloader.exe");
+
+                MagicPatches.ExePatches(HaloExeBytes);
+
+                File.WriteAllBytes(tmpExe, HaloExeBytes);
 
                 HaloOnline = new System.Diagnostics.Process();
-                HaloOnline.StartInfo.FileName = Application.StartupPath + @"\" + HaloOnlineEXE + ".exe";
+                HaloOnline.StartInfo.FileName = tmpExe;
                 HaloOnline.StartInfo.WorkingDirectory = Application.StartupPath;
                 HaloOnline.StartInfo.Arguments = "-window --account 123 --sign-in-code 123 -launcher";
 
                 HaloOnline.Start();
-
+                
                 Memory.SuspendProcess(HaloOnline.Id);
                 MagicPatches.RunStartupPatches();
                 Memory.ResumeProcess(HaloOnline.Id);

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 namespace DarkLoader
 {
-    class MagicPatches
+    public static class MagicPatches
     {
         public static Patches LoadedPatches;
         public class Patch
@@ -23,6 +23,7 @@ namespace DarkLoader
             public string patch { get; set; }
             public bool recursivePatch { get; set; }
             public bool patchOnStartup { get; set; }
+            public bool patchBeforeStartup { get; set; }
         }
         public class Patches
         {
@@ -76,6 +77,39 @@ namespace DarkLoader
             }
             string patchList = File.ReadAllText(Program.PatchFile);
             LoadedPatches = JsonConvert.DeserializeObject<MagicPatches.Patches>(patchList);
+        }
+
+        //TODO: Add pattern scanning functionality.
+        public static void ExePatches(byte[] bytes)
+        {
+            foreach (var patch in LoadedPatches.PatchList.FindAll(patch => patch.patchOnStartup == true))
+            {
+                byte[] patchBytes = HelperFunctions.StringToByteArray(patch.patch);
+                byte[] patchPattern = HelperFunctions.StringToByteArray(patch.pattern);
+                int result = Convert.ToInt32(IndexOfBytes(bytes, patchPattern, patch.match));
+               
+                if (result > 0)
+                {
+                    Buffer.BlockCopy(patchBytes, 0, bytes, result + patch.offset, patchBytes.Length);
+                    result = Convert.ToInt32(IndexOfBytes(bytes, patchPattern, patch.match));
+                    while (patch.recursivePatch && result > 0)
+                    {
+                        Buffer.BlockCopy(patchBytes, 0, bytes, result + patch.offset, patchBytes.Length);
+                        result = Convert.ToInt32(IndexOfBytes(bytes, patchPattern, patch.match));
+                    }
+                }
+            }
+        }
+        public static unsafe long IndexOfBytes(this byte[] haystack, byte[] needle, string match, long startOffset = 0)
+        {
+            fixed (byte* h = haystack) fixed (byte* n = needle)
+            {
+                for (byte* hNext = h + startOffset, hEnd = h + haystack.LongLength + 1 - needle.LongLength, nEnd = n + needle.LongLength; hNext < hEnd; hNext++)
+                    for (byte* hInc = hNext, nInc = n; *nInc == *hInc; hInc++)
+                        if (++nInc == nEnd)
+                            return hNext - h;
+                return -1;
+            }
         }
 
         //This returns an IntPtr of the address found from a byte pattern match.

@@ -130,7 +130,8 @@ namespace DarkLoader
                 offset = Convert.ToInt32(txtScanOffset.Text),
                 patch = txtBytesToPatch.Text,
                 recursivePatch = chkPatchReplaceAll.Checked,
-                patchOnStartup = chkRunOnStartup.Checked
+                patchOnStartup = chkRunOnStartup.Checked,
+                patchBeforeStartup = chkPatchBeforeStartup.Checked
             };
             if (patches.PatchList.ElementAtOrDefault(listPatches.SelectedIndex) != null)
             {
@@ -156,6 +157,7 @@ namespace DarkLoader
                     txtBytesToPatch.Text = patches.PatchList[index].patch;
                     chkPatchReplaceAll.Checked = patches.PatchList[index].recursivePatch;
                     chkRunOnStartup.Checked = patches.PatchList[index].patchOnStartup;
+                    chkPatchBeforeStartup.Checked = patches.PatchList[index].patchBeforeStartup;
                     grpPatch.Enabled = true;
                     grpPatchInfo.Enabled = true;
                     grpPatchResults.Enabled = true;
@@ -180,6 +182,7 @@ namespace DarkLoader
             txtBytesToPatch.Text = "";
             chkPatchReplaceAll.Checked = false;
             chkRunOnStartup.Checked = false;
+            chkPatchBeforeStartup.Checked = false;
             listPatternResults.Items.Clear();
             SavePatch();
 
@@ -238,7 +241,8 @@ namespace DarkLoader
                     offset = Convert.ToInt32(txtScanOffset.Text),
                     patch = txtBytesToPatch.Text,
                     recursivePatch = chkPatchReplaceAll.Checked,
-                    patchOnStartup = chkRunOnStartup.Checked
+                    patchOnStartup = chkRunOnStartup.Checked,
+                    patchBeforeStartup = chkPatchBeforeStartup.Checked
                 };
                 if (tmpPatch.recursivePatch)
                 {
@@ -253,17 +257,19 @@ namespace DarkLoader
                 }
                 else
                 {
-                    if (listPatternResults.SelectedItems.Count > 0)
-                    {
-                        string item = listPatternResults.SelectedItems[0].ToString();
-                        CurrentPatchAddress = (IntPtr)Convert.ToInt32(item, 16);
-                        MagicPatches.PatchSingleAddress(tmpPatch, CurrentPatchAddress);
-                    }
-                    else
-                    {
-                        MessageBox.Show("If you're not running a full run, you need to select an address in the patch test results.");
-                    }
-
+                    this.Invoke((MethodInvoker)delegate()
+                   {
+                       if (listPatternResults.SelectedItems.Count > 0)
+                       {
+                           string item = listPatternResults.SelectedItems[0].ToString();
+                           CurrentPatchAddress = (IntPtr)Convert.ToInt32(item, 16);
+                           MagicPatches.PatchSingleAddress(tmpPatch, CurrentPatchAddress);
+                       }
+                       else
+                       {
+                           MessageBox.Show("If you're not running a full run, you need to select an address in the patch test results.");
+                       }
+                   });
                 }
 
             }
@@ -290,6 +296,16 @@ namespace DarkLoader
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("https://github.com/dark-c0de/DarkLoader/wiki");
+        }
+
+        private void downloadLatestPatchesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+             DialogResult dialogResult = MessageBox.Show("Are you sure you want to download the latest Patch File? This will overwrite any changes you've made! Please backup your changes before hitting OK.", "Replace Patches?", MessageBoxButtons.YesNo);
+             if (dialogResult == DialogResult.Yes)
+             {
+                 Program.GetLatestPatchJson(true);
+                 LoadPatches();
+             }
         }
     }
 }
