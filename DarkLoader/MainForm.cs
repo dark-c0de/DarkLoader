@@ -36,7 +36,7 @@ namespace DarkLoader
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
             Thread loadPatches = new Thread(MagicPatches.LoadPatches);
             loadPatches.Start();
@@ -84,11 +84,60 @@ namespace DarkLoader
             Thread haloWatcher = new Thread(IsHaloRunning);
             haloWatcher.Start();
 
+            //Let's keep an eye out for frost so we can kill it and hijack the session tokens
+            Thread frostWatcher = new Thread(FrostWatcher);
+            frostWatcher.Start();
+
             //Let's make sure people are running the greatest latest turd available
             if (!Program.IsDebug)
             {
                 Thread checkUpdates = new Thread(CheckForUpdates);
                 checkUpdates.Start();
+            }
+        }
+        private void FrostWatcher()
+        {
+            string FrostLogFile = Application.StartupPath + "/Frost/launcherUpdater.log";
+            while (WeRunningYup)
+            {
+                bool LaunchRequest = false;
+                if (File.Exists(FrostLogFile))
+                {
+                    var forstProcessess = Process.GetProcesses().Where(pr => pr.ProcessName.Contains("frost"));
+
+                    foreach (var process in forstProcessess)
+                    {
+                        process.WaitForExit();
+                    }
+                    string FrostLog = File.ReadAllText(FrostLogFile);
+                    File.Delete(FrostLogFile+"-DarkBackup.log");
+                    File.Move(FrostLogFile,FrostLogFile+"-DarkBackup.log");
+                    
+                    if (FrostLog != "")
+                    {
+                        string launchOptions = FrostLog.Split(new[] { '\r', '\n' }).FirstOrDefault().Split(new[] { "halo_online.exe" }, StringSplitOptions.None)[1];
+                        this.Invoke(new MethodInvoker(delegate
+                        {
+                            txt4gameArguments.Text = launchOptions;
+                        }));
+                        LaunchRequest = true;
+                    }
+                }
+                Thread.Sleep(150);
+                var haloProcesses = Process.GetProcesses().Where(pr => pr.ProcessName.Contains("halo"));
+
+                foreach (var process in haloProcesses)
+                {
+                    process.Kill();
+                }
+                if (LaunchRequest)
+                {
+                    DialogResult dialogResult = MessageBox.Show("DarkLoader has detected a 4game startup request. Want to start Halo Online?", "Let's play!", MessageBoxButtons.YesNo);
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        LaunchHaloOnline();
+                    }
+                }
             }
         }
         private void CheckForUpdates()
@@ -294,24 +343,27 @@ namespace DarkLoader
 
         private void btnLaunchHaloOnline_Click(object sender, EventArgs e)
         {
+            Thread startHalo = new Thread(LaunchHaloOnline);
+            startHalo.Start();
+        }
+        private void LaunchHaloOnline()
+        {
             if (!HaloIsRunning)
             {
                 byte[] HaloExeBytes = File.ReadAllBytes(Application.StartupPath + @"\" + HaloOnlineEXE + ".exe");
 
-
-                string tmpExe = Path.Combine(Path.GetTempPath(), "_tmpdarkloader.exe");
-
+                string tmpExe = Path.Combine(Application.StartupPath, "darkloaded.exe");
                 MagicPatches.ExePatches(HaloExeBytes);
 
                 File.WriteAllBytes(tmpExe, HaloExeBytes);
-
+                Thread.Sleep(100);
                 HaloOnline = new System.Diagnostics.Process();
                 HaloOnline.StartInfo.FileName = tmpExe;
                 HaloOnline.StartInfo.WorkingDirectory = Application.StartupPath;
-                HaloOnline.StartInfo.Arguments = "-window --account 123 --sign-in-code 123 -launcher";
+                HaloOnline.StartInfo.Arguments = txtHaloLaunchArguments.Text + " " + txt4gameArguments.Text + " -launcher";
 
                 HaloOnline.Start();
-                
+
                 Memory.SuspendProcess(HaloOnline.Id);
                 MagicPatches.RunStartupPatches();
                 Memory.ResumeProcess(HaloOnline.Id);
@@ -354,6 +406,12 @@ namespace DarkLoader
         {
             PatchEditor patchy = new PatchEditor();
             patchy.Show();
+        }
+
+        private void btn4gamePlay_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Login to 4game and hit Play like you would normally load Halo Online. DarkLoader will catch it and DarkLoad so you can play online.");
+            Process.Start("https://ru.4game.com/halo/play/");
         }
     }
 }
