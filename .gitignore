@@ -1,3 +1,4 @@
 DarkLoader/obj/
 DarkLoader/bin/
 *.suo
+packages/
