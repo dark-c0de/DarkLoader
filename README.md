@@ -20,7 +20,7 @@ You can easily help us by building patches, no C# compiling required. Check out 
 * Live_release_9.1.416138 (August 1st, 2015)
 * Live_release_10.1.430653 (August 7th, 2015)
 * Live_release_11.1.498295 (September 14th, 2015)
-* 
+
 ### Here's a feature list of what it can do right now:
 1. "DarkLoad" maps on every available gametype, and every map type. (Including Forge!), from every "known" build of Halo Online.
 2. Load Halo Online in English
