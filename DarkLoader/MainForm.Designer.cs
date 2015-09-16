@@ -51,8 +51,8 @@
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.txtHaloLaunchArguments = new System.Windows.Forms.TextBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.txt4gameArguments = new System.Windows.Forms.TextBox();
             this.btn4gamePlay = new System.Windows.Forms.Button();
+            this.txt4gameArguments = new System.Windows.Forms.TextBox();
             this.groupTools.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -148,6 +148,7 @@
             this.comboGameModes.Name = "comboGameModes";
             this.comboGameModes.Size = new System.Drawing.Size(84, 21);
             this.comboGameModes.TabIndex = 6;
+            this.comboGameModes.SelectedIndexChanged += new System.EventHandler(this.comboGameModes_SelectedIndexChanged);
             // 
             // comboGameTypes
             // 
@@ -169,6 +170,7 @@
             this.comboGameTypes.Name = "comboGameTypes";
             this.comboGameTypes.Size = new System.Drawing.Size(84, 21);
             this.comboGameTypes.TabIndex = 7;
+            this.comboGameTypes.SelectedIndexChanged += new System.EventHandler(this.comboGameTypes_SelectedIndexChanged);
             // 
             // btnHelpMe
             // 
@@ -178,7 +180,7 @@
             this.btnHelpMe.TabIndex = 8;
             this.btnHelpMe.Text = "Doesn\'t Work?";
             this.btnHelpMe.UseVisualStyleBackColor = true;
-            this.btnHelpMe.Click += new System.EventHandler(this.button1_Click);
+            this.btnHelpMe.Click += new System.EventHandler(this.btnIssues_Click);
             // 
             // groupTools
             // 
@@ -312,15 +314,6 @@
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "4game";
             // 
-            // txt4gameArguments
-            // 
-            this.txt4gameArguments.Location = new System.Drawing.Point(69, 19);
-            this.txt4gameArguments.Name = "txt4gameArguments";
-            this.txt4gameArguments.Size = new System.Drawing.Size(273, 21);
-            this.txt4gameArguments.TabIndex = 0;
-            this.txt4gameArguments.Text = "--account 123 --sign-in-code 123 --environment MS29_LIVE-AutoDefault-https -frost" +
-    "Zone eu";
-            // 
             // btn4gamePlay
             // 
             this.btn4gamePlay.Location = new System.Drawing.Point(6, 19);
@@ -330,6 +323,15 @@
             this.btn4gamePlay.Text = "Play";
             this.btn4gamePlay.UseVisualStyleBackColor = true;
             this.btn4gamePlay.Click += new System.EventHandler(this.btn4gamePlay_Click);
+            // 
+            // txt4gameArguments
+            // 
+            this.txt4gameArguments.Location = new System.Drawing.Point(69, 19);
+            this.txt4gameArguments.Name = "txt4gameArguments";
+            this.txt4gameArguments.Size = new System.Drawing.Size(273, 21);
+            this.txt4gameArguments.TabIndex = 0;
+            this.txt4gameArguments.Text = "--account 123 --sign-in-code 123 --environment MS29_LIVE-AutoDefault-https -frost" +
+    "Zone eu";
             // 
             // MainForm
             // 

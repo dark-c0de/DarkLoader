@@ -28,6 +28,7 @@ namespace DarkLoader
 
             if (!File.Exists(Application.StartupPath + @"\maps\tags.dat"))
             {
+                GoogleAnalyticsApi.TrackEvent("Idiot Check", "User started DarkLoader from the wrong folder", "");
                 MessageBox.Show("Please load DarkLoader from your Halo Online Installation Directory.", "Halo.Click - DarkLoader");
                 Application.Exit();
             }
@@ -41,6 +42,7 @@ namespace DarkLoader
 
         public static void GetVersionJson(bool force = false)
         {
+            GoogleAnalyticsApi.TrackEvent("Program.cs", "GetVersionJson", "");
             //If they don't have a version, let's download the latest from GitHub
             if (!File.Exists("DarkLoader-Versions.json") || force)
             {
@@ -52,12 +54,14 @@ namespace DarkLoader
                 }
                 catch (Exception e)
                 {
+                    GoogleAnalyticsApi.TrackEvent("Errors", "GetVersionJson", e.Message);
                     MessageBox.Show("There was an error downloading the latest version file. Firewall?\n\n" + e.Message);
                 }
             }
         }
         public static void GetLatestPatchJson(bool force = false)
         {
+            GoogleAnalyticsApi.TrackEvent("Program.cs", "GetLatestPatchJson", "");
             //If they don't have a patch file, let's download the latest from GitHub
             if (!File.Exists(PatchFile) || force)
             {
@@ -70,6 +74,7 @@ namespace DarkLoader
                 }
                 catch (Exception e)
                 {
+                    GoogleAnalyticsApi.TrackEvent("Errors", "GetLatestPatchJson", e.Message);
                     MessageBox.Show("There was an error downloading the latest " + PatchFile + ". Firewall?\n\n" + e.Message);
                 }
             }

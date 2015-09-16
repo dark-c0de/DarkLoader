@@ -30,8 +30,8 @@
         {
             this.listPatches = new System.Windows.Forms.ListBox();
             this.grpScanBytes = new System.Windows.Forms.GroupBox();
+            this.btnFillX = new System.Windows.Forms.Button();
             this.txtPatternBytesSearch = new System.Windows.Forms.TextBox();
-            this.lblPatternTest = new System.Windows.Forms.Label();
             this.btnPatchScanTest = new System.Windows.Forms.Button();
             this.txtScanOffset = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
@@ -53,20 +53,19 @@
             this.grpPatchResults = new System.Windows.Forms.GroupBox();
             this.listPatternResults = new System.Windows.Forms.ListBox();
             this.grpPatch = new System.Windows.Forms.GroupBox();
+            this.chkPatchBeforeStartup = new System.Windows.Forms.CheckBox();
+            this.chkRunOnStartup = new System.Windows.Forms.CheckBox();
             this.txtBytesToPatch = new System.Windows.Forms.TextBox();
             this.btnTestPatchWrite = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.chkPatchReplaceAll = new System.Windows.Forms.CheckBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatusBar = new System.Windows.Forms.ToolStripStatusLabel();
-            this.chkRunOnStartup = new System.Windows.Forms.CheckBox();
-            this.btnFillX = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.memoryViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.chkPatchBeforeStartup = new System.Windows.Forms.CheckBox();
             this.downloadLatestPatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.grpScanBytes.SuspendLayout();
             this.grpPatchList.SuspendLayout();
             this.grpPatchInfo.SuspendLayout();
@@ -89,7 +88,6 @@
             // 
             this.grpScanBytes.Controls.Add(this.btnFillX);
             this.grpScanBytes.Controls.Add(this.txtPatternBytesSearch);
-            this.grpScanBytes.Controls.Add(this.lblPatternTest);
             this.grpScanBytes.Controls.Add(this.btnPatchScanTest);
             this.grpScanBytes.Controls.Add(this.txtScanOffset);
             this.grpScanBytes.Controls.Add(this.label6);
@@ -104,6 +102,16 @@
             this.grpScanBytes.TabStop = false;
             this.grpScanBytes.Text = "Pattern Scan Bytes";
             // 
+            // btnFillX
+            // 
+            this.btnFillX.Location = new System.Drawing.Point(446, 67);
+            this.btnFillX.Name = "btnFillX";
+            this.btnFillX.Size = new System.Drawing.Size(43, 20);
+            this.btnFillX.TabIndex = 10;
+            this.btnFillX.Text = "Fill";
+            this.btnFillX.UseVisualStyleBackColor = true;
+            this.btnFillX.Click += new System.EventHandler(this.btnFillX_Click);
+            // 
             // txtPatternBytesSearch
             // 
             this.txtPatternBytesSearch.Location = new System.Drawing.Point(57, 24);
@@ -112,22 +120,13 @@
             this.txtPatternBytesSearch.Size = new System.Drawing.Size(432, 37);
             this.txtPatternBytesSearch.TabIndex = 9;
             // 
-            // lblPatternTest
-            // 
-            this.lblPatternTest.AutoSize = true;
-            this.lblPatternTest.Location = new System.Drawing.Point(225, 101);
-            this.lblPatternTest.Name = "lblPatternTest";
-            this.lblPatternTest.Size = new System.Drawing.Size(184, 13);
-            this.lblPatternTest.TabIndex = 8;
-            this.lblPatternTest.Text = "Hit \"Test\" to see if your pattern works";
-            // 
             // btnPatchScanTest
             // 
             this.btnPatchScanTest.Location = new System.Drawing.Point(144, 96);
             this.btnPatchScanTest.Name = "btnPatchScanTest";
             this.btnPatchScanTest.Size = new System.Drawing.Size(75, 23);
             this.btnPatchScanTest.TabIndex = 7;
-            this.btnPatchScanTest.Text = "Test";
+            this.btnPatchScanTest.Text = "Test Pattern";
             this.btnPatchScanTest.UseVisualStyleBackColor = true;
             this.btnPatchScanTest.Click += new System.EventHandler(this.btnPatchScanTest_click);
             // 
@@ -329,6 +328,26 @@
             this.grpPatch.TabStop = false;
             this.grpPatch.Text = "Patch";
             // 
+            // chkPatchBeforeStartup
+            // 
+            this.chkPatchBeforeStartup.AutoSize = true;
+            this.chkPatchBeforeStartup.Location = new System.Drawing.Point(111, 85);
+            this.chkPatchBeforeStartup.Name = "chkPatchBeforeStartup";
+            this.chkPatchBeforeStartup.Size = new System.Drawing.Size(149, 17);
+            this.chkPatchBeforeStartup.TabIndex = 6;
+            this.chkPatchBeforeStartup.Text = "Patch EXE Before Startup";
+            this.chkPatchBeforeStartup.UseVisualStyleBackColor = true;
+            // 
+            // chkRunOnStartup
+            // 
+            this.chkRunOnStartup.AutoSize = true;
+            this.chkRunOnStartup.Location = new System.Drawing.Point(266, 85);
+            this.chkRunOnStartup.Name = "chkRunOnStartup";
+            this.chkRunOnStartup.Size = new System.Drawing.Size(100, 17);
+            this.chkRunOnStartup.TabIndex = 5;
+            this.chkRunOnStartup.Text = "Run On Startup";
+            this.chkRunOnStartup.UseVisualStyleBackColor = true;
+            // 
             // txtBytesToPatch
             // 
             this.txtBytesToPatch.Location = new System.Drawing.Point(19, 39);
@@ -382,26 +401,6 @@
             this.lblStatusBar.Size = new System.Drawing.Size(26, 17);
             this.lblStatusBar.Text = "Idle";
             // 
-            // chkRunOnStartup
-            // 
-            this.chkRunOnStartup.AutoSize = true;
-            this.chkRunOnStartup.Location = new System.Drawing.Point(266, 85);
-            this.chkRunOnStartup.Name = "chkRunOnStartup";
-            this.chkRunOnStartup.Size = new System.Drawing.Size(100, 17);
-            this.chkRunOnStartup.TabIndex = 5;
-            this.chkRunOnStartup.Text = "Run On Startup";
-            this.chkRunOnStartup.UseVisualStyleBackColor = true;
-            // 
-            // btnFillX
-            // 
-            this.btnFillX.Location = new System.Drawing.Point(446, 67);
-            this.btnFillX.Name = "btnFillX";
-            this.btnFillX.Size = new System.Drawing.Size(43, 20);
-            this.btnFillX.TabIndex = 10;
-            this.btnFillX.Text = "Fill";
-            this.btnFillX.UseVisualStyleBackColor = true;
-            this.btnFillX.Click += new System.EventHandler(this.btnFillX_Click);
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -425,26 +424,9 @@
             // memoryViewerToolStripMenuItem
             // 
             this.memoryViewerToolStripMenuItem.Name = "memoryViewerToolStripMenuItem";
-            this.memoryViewerToolStripMenuItem.Size = new System.Drawing.Size(157, 22);
+            this.memoryViewerToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.memoryViewerToolStripMenuItem.Text = "Memory Viewer";
             this.memoryViewerToolStripMenuItem.Click += new System.EventHandler(this.memoryViewerToolStripMenuItem_Click);
-            // 
-            // helpToolStripMenuItem
-            // 
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.helpToolStripMenuItem.Text = "Help";
-            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
-            // 
-            // chkPatchBeforeStartup
-            // 
-            this.chkPatchBeforeStartup.AutoSize = true;
-            this.chkPatchBeforeStartup.Location = new System.Drawing.Point(111, 85);
-            this.chkPatchBeforeStartup.Name = "chkPatchBeforeStartup";
-            this.chkPatchBeforeStartup.Size = new System.Drawing.Size(149, 17);
-            this.chkPatchBeforeStartup.TabIndex = 6;
-            this.chkPatchBeforeStartup.Text = "Patch EXE Before Startup";
-            this.chkPatchBeforeStartup.UseVisualStyleBackColor = true;
             // 
             // downloadLatestPatchesToolStripMenuItem
             // 
@@ -452,6 +434,13 @@
             this.downloadLatestPatchesToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
             this.downloadLatestPatchesToolStripMenuItem.Text = "Download Latest Patches";
             this.downloadLatestPatchesToolStripMenuItem.Click += new System.EventHandler(this.downloadLatestPatchesToolStripMenuItem_Click);
+            // 
+            // helpToolStripMenuItem
+            // 
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "Help";
+            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
             // PatchEditor
             // 
@@ -470,6 +459,7 @@
             this.MaximizeBox = false;
             this.Name = "PatchEditor";
             this.Text = "DarkLoader - PatchEditor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PatchEditor_FormClosing);
             this.Load += new System.EventHandler(this.PatchEditor_Load);
             this.grpScanBytes.ResumeLayout(false);
             this.grpScanBytes.PerformLayout();
@@ -503,7 +493,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtPatchTitle;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label lblPatternTest;
         private System.Windows.Forms.Button btnPatchScanTest;
         private System.Windows.Forms.TextBox txtScanOffset;
         private System.Windows.Forms.Label label6;

@@ -22,7 +22,8 @@ namespace DarkLoader
         }
         
         private void MemoryView_Load(object sender, EventArgs e)
-        {           
+        {
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "MemoryView_Load", "");
             FormShowing = true;
             bv = new ByteViewer();
             bv.Dock = DockStyle.Fill;
@@ -33,6 +34,7 @@ namespace DarkLoader
             }
         }
         public static void LoadMemoryView(){
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "LoadMemoryView", "");
             byte[] someBytes = new byte[512];
 
             IntPtr pw = Memory.OpenProcess(0x001F0FFF, true, MainForm.HaloOnline.Id);
@@ -44,6 +46,7 @@ namespace DarkLoader
 
         private void MemoryView_FormClosing(object sender, FormClosingEventArgs e)
         {
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "MemoryView_FormClosing", "");
             FormShowing = false;
         }
     }

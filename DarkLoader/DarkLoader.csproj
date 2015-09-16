@@ -47,6 +47,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Design" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp">
@@ -60,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileVersions.cs" />
+    <Compile Include="GoogleAnalyticsApi.cs" />
     <Compile Include="MagicPatches.cs" />
     <Compile Include="HelperFunctions.cs" />
     <Compile Include="MainForm.cs">

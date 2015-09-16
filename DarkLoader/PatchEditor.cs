@@ -19,7 +19,7 @@ namespace DarkLoader
     {
         public static IntPtr CurrentPatchAddress;
         MagicPatches.Patches patches;
-
+        public static bool FormShowing = false;
         public PatchEditor()
         {
             InitializeComponent();
@@ -27,6 +27,7 @@ namespace DarkLoader
 
         private void btnPatchScanTest_click(object sender, EventArgs e)
         {
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "btnPatchScanTest_click", "");
             if (MainForm.HaloIsRunning)
             {
                 listPatternResults.Items.Clear();
@@ -35,6 +36,7 @@ namespace DarkLoader
             }
             else
             {
+
                 MessageBox.Show("Halo isn't running, I can't search for a patch!");
             }
         }
@@ -49,10 +51,12 @@ namespace DarkLoader
 
             if (PatchReturnAddress == null || PatchReturnAddress.ToInt32() <= 0)
             {
+                GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "PatchScanTest", "No results, bad patch?");
                 MessageBox.Show("No results, bad patch?");
             }
             else
             {
+                GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "PatchScanTest", "Found Results!");
                 while (PatchReturnAddress.ToInt32() > 0)
                 {
                     this.Invoke((MethodInvoker)delegate()
@@ -71,6 +75,7 @@ namespace DarkLoader
             {
                 string item = listPatternResults.SelectedItems[0].ToString();
                 CurrentPatchAddress = (IntPtr)Convert.ToInt32(item, 16);
+                GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "listPatternResults_SelectedIndexChanged", item);
             }
             if (!MemoryView.FormShowing)
             {
@@ -85,12 +90,15 @@ namespace DarkLoader
 
         private void PatchEditor_Load(object sender, EventArgs e)
         {
+            FormShowing = true;
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "PatchEditor_Load", "");
             lblStatusBar.Text = "Loading Patches....";
             Thread loadPatches = new Thread(LoadPatches);
             loadPatches.Start();
         }
         private void LoadPatches()
         {
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "LoadPatches", "");
             if (!File.Exists(Program.PatchFile))
             {
                 File.WriteAllText(Program.PatchFile, "{}");
@@ -119,6 +127,7 @@ namespace DarkLoader
         }
         private void SavePatch()
         {
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "SavePatch", txtPatchTitle.Text);
             lblStatusBar.Text = "Saving Patch....";
             MagicPatches.Patch patch = new MagicPatches.Patch
             {
@@ -171,6 +180,7 @@ namespace DarkLoader
 
         private void btnNewPatch_Click(object sender, EventArgs e)
         {
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "btnNewPatch_Click", "");
             listPatches.Items.Add("New Patch");
             listPatches.SelectedIndex = listPatches.Items.Count - 1;
             txtPatchTitle.Text = "New Patch";
@@ -190,17 +200,19 @@ namespace DarkLoader
 
         private void btnDeletePatch_Click(object sender, EventArgs e)
         {
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "btnDeletePatch_Click", "");
             DialogResult dialogResult = MessageBox.Show("Are you sure you want to remove the patch named \"" + listPatches.SelectedItems[0].ToString() + "\"", "Delete Patch?", MessageBoxButtons.YesNo);
             if (dialogResult == DialogResult.Yes)
             {
                 int index = listPatches.SelectedIndex;
                 patches.PatchList.RemoveAt(index);
                 listPatches.SelectedIndex = index - 1;
-                WritePatchesToDisk();               
+                WritePatchesToDisk();
             }
         }
         private void WritePatchesToDisk()
         {
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "WritePatchesToDisk", "");
             string jsonPatch = JsonConvert.SerializeObject(patches, Formatting.Indented);
             File.WriteAllText(Program.PatchFile, jsonPatch);
             LoadPatches();
@@ -216,6 +228,7 @@ namespace DarkLoader
 
         private void btnTestPatchWrite_click(object sender, EventArgs e)
         {
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "btnTestPatchWrite_click", "");
             if (MainForm.HaloIsRunning)
             {
                 Thread testPatchWrite = new Thread(TestPatchWrite);
@@ -225,7 +238,7 @@ namespace DarkLoader
             {
                 MessageBox.Show("Halo isn't running, I can't test a patch write!");
             }
-            
+
         }
         private void TestPatchWrite()
         {
@@ -248,10 +261,12 @@ namespace DarkLoader
                 {
                     if (MagicPatches.PatchRecursive(tmpPatch))
                     {
+                        GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "TestPatchWrite", "Patch Successful");
                         MessageBox.Show("Patch Successful");
                     }
                     else
                     {
+                        GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "TestPatchWrite", "Patch Failed.");
                         MessageBox.Show("Patch Failed.");
                     }
                 }
@@ -280,12 +295,14 @@ namespace DarkLoader
         }
         private void btnFillX_Click(object sender, EventArgs e)
         {
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "btnFillX_Click", "");
             byte[] searchBytePattern = HelperFunctions.StringToByteArray(txtPatternBytesSearch.Text);
             txtPatternMatch.Text = HelperFunctions.Repeat("x", searchBytePattern.Length);
         }
 
         private void memoryViewerToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "memoryViewerToolStripMenuItem_Click", "");
             if (!MemoryView.FormShowing)
             {
                 MemoryView mv = new MemoryView();
@@ -295,17 +312,25 @@ namespace DarkLoader
 
         private void helpToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "helpToolStripMenuItem_Click", "");
             Process.Start("https://github.com/dark-c0de/DarkLoader/wiki");
         }
 
         private void downloadLatestPatchesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-             DialogResult dialogResult = MessageBox.Show("Are you sure you want to download the latest Patch File? This will overwrite any changes you've made! Please backup your changes before hitting OK.", "Replace Patches?", MessageBoxButtons.YesNo);
-             if (dialogResult == DialogResult.Yes)
-             {
-                 Program.GetLatestPatchJson(true);
-                 LoadPatches();
-             }
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "downloadLatestPatchesToolStripMenuItem_Click", "");
+            DialogResult dialogResult = MessageBox.Show("Are you sure you want to download the latest Patch File? This will overwrite any changes you've made! Please backup your changes before hitting OK.", "Replace Patches?", MessageBoxButtons.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                Program.GetLatestPatchJson(true);
+                LoadPatches();
+            }
+        }
+
+        private void PatchEditor_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "PatchEditor_FormClosing", "");
+            FormShowing = false;
         }
     }
 }
