@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="FileVersions.cs" />
     <Compile Include="GoogleAnalyticsApi.cs" />
+    <Compile Include="LogFile.cs" />
     <Compile Include="MagicPatches.cs" />
     <Compile Include="HelperFunctions.cs" />
     <Compile Include="MainForm.cs">
