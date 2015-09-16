@@ -119,16 +119,16 @@
   </resheader>
   <data name="label1.Text" xml:space="preserve">
     <value>Select a map on the left you'd like to load.
-Hit "Launch Halo Online"
 When you get to the main menu, hit "DarkLoad."
+
+
+To play online you will need to hit the "Play" 
+button on the 4game website. DarkLoader will catch it and
+start the game for you with the correct credentials.
 
 Enjoy!
 
-This DarkLoader is for Eldorado.exe Version 0.4.1.4409, but it
-might work for newer\older builds.... Pattern Scanning rocks!
-
 -DARKC0DE
-
 Shoutout to xbox7887, emoose, shockfire, vicelio, and everyone else.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />

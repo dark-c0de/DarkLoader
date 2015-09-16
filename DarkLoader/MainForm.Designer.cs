@@ -48,12 +48,19 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnPatchEditor = new System.Windows.Forms.Button();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.txtHaloLaunchArguments = new System.Windows.Forms.TextBox();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.txt4gameArguments = new System.Windows.Forms.TextBox();
+            this.btn4gamePlay = new System.Windows.Forms.Button();
             this.groupTools.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.SuspendLayout();
             // 
             // listMapNames
@@ -71,9 +78,9 @@
             // btnLaunchHaloOnline
             // 
             this.btnLaunchHaloOnline.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLaunchHaloOnline.Location = new System.Drawing.Point(50, 15);
+            this.btnLaunchHaloOnline.Location = new System.Drawing.Point(17, 15);
             this.btnLaunchHaloOnline.Name = "btnLaunchHaloOnline";
-            this.btnLaunchHaloOnline.Size = new System.Drawing.Size(107, 33);
+            this.btnLaunchHaloOnline.Size = new System.Drawing.Size(130, 33);
             this.btnLaunchHaloOnline.TabIndex = 1;
             this.btnLaunchHaloOnline.Text = "Launch Halo Online";
             this.btnLaunchHaloOnline.UseVisualStyleBackColor = true;
@@ -114,9 +121,9 @@
             // btnDarkLoad
             // 
             this.btnDarkLoad.Enabled = false;
-            this.btnDarkLoad.Location = new System.Drawing.Point(163, 15);
+            this.btnDarkLoad.Location = new System.Drawing.Point(167, 15);
             this.btnDarkLoad.Name = "btnDarkLoad";
-            this.btnDarkLoad.Size = new System.Drawing.Size(107, 33);
+            this.btnDarkLoad.Size = new System.Drawing.Size(130, 33);
             this.btnDarkLoad.TabIndex = 5;
             this.btnDarkLoad.Text = "DarkLoad";
             this.btnDarkLoad.UseVisualStyleBackColor = true;
@@ -276,11 +283,61 @@
             this.btnPatchEditor.UseVisualStyleBackColor = true;
             this.btnPatchEditor.Click += new System.EventHandler(this.btnPatchEditor_click);
             // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.txtHaloLaunchArguments);
+            this.groupBox6.Location = new System.Drawing.Point(12, 380);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(325, 46);
+            this.groupBox6.TabIndex = 15;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Halo Online Launch Arguments";
+            // 
+            // txtHaloLaunchArguments
+            // 
+            this.txtHaloLaunchArguments.Location = new System.Drawing.Point(11, 19);
+            this.txtHaloLaunchArguments.Name = "txtHaloLaunchArguments";
+            this.txtHaloLaunchArguments.Size = new System.Drawing.Size(304, 21);
+            this.txtHaloLaunchArguments.TabIndex = 0;
+            this.txtHaloLaunchArguments.Text = "-window";
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.btn4gamePlay);
+            this.groupBox7.Controls.Add(this.txt4gameArguments);
+            this.groupBox7.Location = new System.Drawing.Point(349, 380);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(348, 46);
+            this.groupBox7.TabIndex = 16;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "4game";
+            // 
+            // txt4gameArguments
+            // 
+            this.txt4gameArguments.Location = new System.Drawing.Point(69, 19);
+            this.txt4gameArguments.Name = "txt4gameArguments";
+            this.txt4gameArguments.Size = new System.Drawing.Size(273, 21);
+            this.txt4gameArguments.TabIndex = 0;
+            this.txt4gameArguments.Text = "--account 123 --sign-in-code 123 --environment MS29_LIVE-AutoDefault-https -frost" +
+    "Zone eu";
+            // 
+            // btn4gamePlay
+            // 
+            this.btn4gamePlay.Location = new System.Drawing.Point(6, 19);
+            this.btn4gamePlay.Name = "btn4gamePlay";
+            this.btn4gamePlay.Size = new System.Drawing.Size(57, 21);
+            this.btn4gamePlay.TabIndex = 1;
+            this.btn4gamePlay.Text = "Play";
+            this.btn4gamePlay.UseVisualStyleBackColor = true;
+            this.btn4gamePlay.Click += new System.EventHandler(this.btn4gamePlay_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(712, 386);
+            this.ClientSize = new System.Drawing.Size(712, 438);
+            this.Controls.Add(this.groupBox7);
+            this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.btnHaloClick);
@@ -298,7 +355,7 @@
             this.Name = "MainForm";
             this.Text = "DarkLoader";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupTools.ResumeLayout(false);
             this.groupTools.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -306,6 +363,10 @@
             this.groupBox4.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -332,6 +393,11 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button btnPatchEditor;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.TextBox txtHaloLaunchArguments;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.TextBox txt4gameArguments;
+        private System.Windows.Forms.Button btn4gamePlay;
     }
 }
 
