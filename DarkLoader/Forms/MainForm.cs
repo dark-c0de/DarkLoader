@@ -39,7 +39,9 @@ namespace DarkLoader
         private void MainForm_Load(object sender, EventArgs e)
         {
             LogFile.WriteToLog("------------- Started DarkLoader -------------");
-            GoogleAnalyticsApi.TrackEvent("MainForm.cs", "MainForm_Load", "");
+            GoogleAnalyticsApi.TrackPageview("MainForm.cs", "MainForm_Load", "");
+
+            txtHaloLaunchArguments.Text = Properties.Settings.Default.HOLaunchArguments;
             Thread loadPatches = new Thread(MagicPatches.LoadPatches);
             loadPatches.Start();
             WeRunningYup = true;
@@ -134,15 +136,16 @@ namespace DarkLoader
                     }
                     if (LaunchRequest)
                     {
+                        this.Invoke(new MethodInvoker(delegate
+                              {
+                                  splash = new Forms.Splash();
+                                  splash.Show();
+                              }));
                         inLauncherLoop = true;
                         Thread launcherLoop = new Thread(KillFrostLauncherLoop);
                         launcherLoop.Start();
-                        DialogResult dialogResult = MessageBox.Show("DarkLoader has detected a 4game startup request. Want to start Halo Online?", "Let's play!", MessageBoxButtons.YesNo);
-                        if (dialogResult == DialogResult.Yes)
-                        {
-                            GoogleAnalyticsApi.TrackEvent("MainForm.cs", "FrostWatcher", "Started Halo Online from 4game");
-                            LaunchHaloOnline();
-                        }
+                        GoogleAnalyticsApi.TrackEvent("MainForm.cs", "FrostWatcher", "Started Halo Online from 4game");
+                        LaunchHaloOnline();
                         inLauncherLoop = false;
                     }
                 }
@@ -386,15 +389,18 @@ namespace DarkLoader
             GoogleAnalyticsApi.TrackEvent("MainForm.cs", "MainForm_FormClosing","");
             WeRunningYup = false;
         }
-
+        Forms.Splash splash;
         private void btnLaunchHaloOnline_Click(object sender, EventArgs e)
         {
             btnLaunchHaloOnline.Enabled = false;
             btnLaunchHaloOnline.Text = "Launching...";
             GoogleAnalyticsApi.TrackEvent("MainForm.cs", "btnLaunchHaloOnline_Click", "");
+            splash = new Forms.Splash();
+            splash.Show();
             Thread startHalo = new Thread(LaunchHaloOnline);
             startHalo.Start();
         }
+
         private void LaunchHaloOnline()
         {
             var darkLoadedProcesses = Process.GetProcesses().Where(pr => pr.ProcessName.Contains("darkloaded"));
@@ -412,7 +418,7 @@ namespace DarkLoader
 
                     string tmpExe = Path.Combine(Application.StartupPath, "darkloaded.exe");
                     string gameShield = Path.Combine(Application.StartupPath, "gameShieldDll.dll");
-                    
+
                     MagicPatches.ExePatches(HaloExeBytes);
 
                     File.WriteAllBytes(tmpExe, HaloExeBytes);
@@ -436,15 +442,27 @@ namespace DarkLoader
                     Memory.SuspendProcess(HaloOnline.Id);
                     MagicPatches.RunStartupPatches();
                     Memory.ResumeProcess(HaloOnline.Id);
+                    this.Invoke(new MethodInvoker(delegate
+                    {
+                        splash.Hide();
+                    }));
                 }
                 catch (Exception e)
                 {
+                    this.Invoke(new MethodInvoker(delegate
+                      {
+                          splash.Hide();
+                      }));
                     GoogleAnalyticsApi.TrackEvent("MainForm.cs", "LaunchHaloOnline", e.Message);
                     MessageBox.Show("Failed to start Halo Online!\n\n" + e.Message, "Something bad happened.");
                 }
             }
             else
             {
+                this.Invoke(new MethodInvoker(delegate
+                {
+                    splash.Hide();
+                }));
                 GoogleAnalyticsApi.TrackEvent("MainForm.cs", "LaunchHaloOnline", "Halo Already Running");
                 MessageBox.Show("Halo Online is already running!", "DarkLoader uh...");
             }
@@ -453,6 +471,7 @@ namespace DarkLoader
                            btnLaunchHaloOnline.Enabled = true;
                            btnLaunchHaloOnline.Text = "Launch Halo Online";
                        }));
+
         }
 
         private void btnIssues_Click(object sender, EventArgs e)
@@ -522,6 +541,12 @@ namespace DarkLoader
             {
                 GoogleAnalyticsApi.TrackEvent("MainForm.cs", "comboGameModes_SelectedIndexChanged", comboGameModes.SelectedItem.ToString());
             }
+        }
+
+        private void txtHaloLaunchArguments_TextChanged(object sender, EventArgs e)
+        {
+           Properties.Settings.Default.HOLaunchArguments =  txtHaloLaunchArguments.Text;
+           Properties.Settings.Default.Save();
         }
     }
 }

@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HexHelper));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtBytes = new System.Windows.Forms.TextBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtText = new System.Windows.Forms.TextBox();
             this.chkUnicode = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
@@ -47,16 +48,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Bytes";
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.txtText);
-            this.groupBox2.Location = new System.Drawing.Point(12, 118);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(538, 100);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Text";
-            // 
             // txtBytes
             // 
             this.txtBytes.Location = new System.Drawing.Point(6, 19);
@@ -67,6 +58,16 @@
             this.txtBytes.TabIndex = 0;
             this.txtBytes.TextChanged += new System.EventHandler(this.txtBytes_TextChanged);
             this.txtBytes.Enter += new System.EventHandler(this.txtBytes_Enter);
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.txtText);
+            this.groupBox2.Location = new System.Drawing.Point(12, 118);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(538, 100);
+            this.groupBox2.TabIndex = 1;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Text";
             // 
             // txtText
             // 
@@ -94,11 +95,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(562, 252);
             this.Controls.Add(this.chkUnicode);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
+            this.ForeColor = System.Drawing.Color.Black;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "HexHelper";
             this.Text = "HexHelper";

@@ -1,6 +1,6 @@
-﻿namespace DarkLoader
+﻿namespace DarkLoader.Forms
 {
-    partial class MemoryView
+    partial class Splash
     {
         /// <summary>
         /// Required designer variable.
@@ -28,21 +28,22 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MemoryView));
             this.SuspendLayout();
             // 
-            // MemoryView
+            // Splash
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(670, 579);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.Name = "MemoryView";
-            this.Text = "MemoryView";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MemoryView_FormClosing);
-            this.Load += new System.EventHandler(this.MemoryView_Load);
+            this.BackgroundImage = global::DarkLoader.Properties.Resources.DarkLoader;
+            this.ClientSize = new System.Drawing.Size(512, 512);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Name = "Splash";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Splash";
+            this.TopMost = true;
+            this.Load += new System.EventHandler(this.Splash_Load);
             this.ResumeLayout(false);
 
         }

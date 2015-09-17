@@ -68,6 +68,7 @@ namespace DarkLoader
                     PatchReturnAddress = MagicPatches.ScanForPattern(MainForm.HaloOnline, searchBytePattern, match, offset, startOffset);
                 }
             }
+            lblPatternResultCount.Text = listPatternResults.Items.Count.ToString() + " Results";
         }
 
         private void listPatternResults_SelectedIndexChanged(object sender, EventArgs e)
@@ -87,14 +88,13 @@ namespace DarkLoader
             {
                 MemoryView.LoadMemoryView();
             }
-            lblPatternResultCount.Text = listPatternResults.Items.Count.ToString() + " Results";
         }
 
         private void PatchEditor_Load(object sender, EventArgs e)
         {
             LogFile.WriteToLog("------------ Loaded PatchEditor ------------");
             FormShowing = true;
-            GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "PatchEditor_Load", "");
+            GoogleAnalyticsApi.TrackPageview("PatchEditor.cs", "PatchEditor_Load", "");
             lblStatusBar.Text = "Loading Patches....";
             Thread loadPatches = new Thread(LoadPatches);
             loadPatches.Start();
@@ -391,6 +391,30 @@ namespace DarkLoader
             txtPatternBytesSearch.Text = "";
             txtPatternMatch.Text = "";
             txtPatternOffset.Text = "";
+        }
+
+        private void txtPatternBytesSearch_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                byte[] searchBytePattern = HelperFunctions.StringToByteArray(txtPatternBytesSearch.Text);
+                txtPatternBytesSearch.Text = BitConverter.ToString(searchBytePattern).Replace("-", " ");
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void txtBytesToPatch_Leave(object sender, EventArgs e)
+        {
+            try
+            {
+                byte[] bytesToPatch = HelperFunctions.StringToByteArray(txtBytesToPatch.Text);
+                txtBytesToPatch.Text = BitConverter.ToString(bytesToPatch).Replace("-", " ");
+            }
+            catch (Exception)
+            {
+            }
         }
     }
 }

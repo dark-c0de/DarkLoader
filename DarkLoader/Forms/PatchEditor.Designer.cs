@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PatchEditor));
             this.listPatches = new System.Windows.Forms.ListBox();
             this.grpScanBytes = new System.Windows.Forms.GroupBox();
+            this.btnClearPattern = new System.Windows.Forms.Button();
             this.lblPatternLength = new System.Windows.Forms.Label();
             this.btnFillX = new System.Windows.Forms.Button();
             this.txtPatternBytesSearch = new System.Windows.Forms.TextBox();
@@ -71,7 +73,6 @@
             this.downloadLatestPatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byteHexHelperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnClearPattern = new System.Windows.Forms.Button();
             this.grpScanBytes.SuspendLayout();
             this.grpPatchList.SuspendLayout();
             this.grpPatchInfo.SuspendLayout();
@@ -110,6 +111,16 @@
             this.grpScanBytes.TabStop = false;
             this.grpScanBytes.Text = "Pattern Scan Bytes";
             // 
+            // btnClearPattern
+            // 
+            this.btnClearPattern.Location = new System.Drawing.Point(291, 98);
+            this.btnClearPattern.Name = "btnClearPattern";
+            this.btnClearPattern.Size = new System.Drawing.Size(75, 23);
+            this.btnClearPattern.TabIndex = 15;
+            this.btnClearPattern.Text = "Clear";
+            this.btnClearPattern.UseVisualStyleBackColor = true;
+            this.btnClearPattern.Click += new System.EventHandler(this.btnClearPattern_Click);
+            // 
             // lblPatternLength
             // 
             this.lblPatternLength.AutoSize = true;
@@ -138,6 +149,7 @@
             this.txtPatternBytesSearch.Size = new System.Drawing.Size(432, 37);
             this.txtPatternBytesSearch.TabIndex = 9;
             this.txtPatternBytesSearch.TextChanged += new System.EventHandler(this.txtPatternBytesSearch_TextChanged);
+            this.txtPatternBytesSearch.Leave += new System.EventHandler(this.txtPatternBytesSearch_Leave);
             // 
             // btnPatchScanTest
             // 
@@ -407,6 +419,7 @@
             this.txtBytesToPatch.Size = new System.Drawing.Size(470, 40);
             this.txtBytesToPatch.TabIndex = 4;
             this.txtBytesToPatch.TextChanged += new System.EventHandler(this.txtBytesToPatch_TextChanged);
+            this.txtBytesToPatch.Leave += new System.EventHandler(this.txtBytesToPatch_Leave);
             // 
             // btnTestPatchWrite
             // 
@@ -502,16 +515,6 @@
             this.helpToolStripMenuItem.Text = "Help";
             this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
-            // btnClearPattern
-            // 
-            this.btnClearPattern.Location = new System.Drawing.Point(291, 98);
-            this.btnClearPattern.Name = "btnClearPattern";
-            this.btnClearPattern.Size = new System.Drawing.Size(75, 23);
-            this.btnClearPattern.TabIndex = 15;
-            this.btnClearPattern.Text = "Clear";
-            this.btnClearPattern.UseVisualStyleBackColor = true;
-            this.btnClearPattern.Click += new System.EventHandler(this.btnClearPattern_Click);
-            // 
             // PatchEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -525,6 +528,7 @@
             this.Controls.Add(this.grpScanBytes);
             this.Controls.Add(this.grpPatchList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "PatchEditor";

@@ -301,7 +301,7 @@
             this.txtHaloLaunchArguments.Name = "txtHaloLaunchArguments";
             this.txtHaloLaunchArguments.Size = new System.Drawing.Size(304, 21);
             this.txtHaloLaunchArguments.TabIndex = 0;
-            this.txtHaloLaunchArguments.Text = "-window";
+            this.txtHaloLaunchArguments.TextChanged += new System.EventHandler(this.txtHaloLaunchArguments_TextChanged);
             // 
             // groupBox7
             // 
