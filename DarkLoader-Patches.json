@@ -61,18 +61,6 @@
       "patchBeforeStartup": true
     },
     {
-      "title": "Tag Patch 1 (Disabled)",
-      "author": "DARKC0DE",
-      "description": "This patch is 1 of 3 needed for allowing tag edits. This patch works, but it crashes the game because the other two patches still need patched.\r\nPatch(\"TagEdits1\", 0x501A5B, { 0xEB }), (This is done, this is the patch you're looking at)\r\nPatch(\"TagEdits2\", 0x502874, 0x90, 2), (This needs found still)\r\nPatch(\"TagEdits3\", 0x5030AA, 0x90, 2), (This needs found still)",
-      "pattern": "84 C0 75 1C 8D 85",
-      "match": "xxxxxx",
-      "offset": 0,
-      "patch": "EB",
-      "recursivePatch": false,
-      "patchOnStartup": false,
-      "patchBeforeStartup": false
-    },
-    {
       "title": "Ingame Menu Text",
       "author": "DARKC0DE",
       "description": "Replaces \"INGAME MENU\" with \"DarkLoader\"",
@@ -95,6 +83,42 @@
       "recursivePatch": false,
       "patchOnStartup": false,
       "patchBeforeStartup": false
+    },
+    {
+      "title": "Tag Patch 1",
+      "author": "DARKC0DE",
+      "description": "This patch is 1 of 3 needed for allowing tag edits, should work in all versions of Halo Online.",
+      "pattern": "84 C0 75 1C 8D 85",
+      "match": "xxxxxx",
+      "offset": 2,
+      "patch": "EB",
+      "recursivePatch": false,
+      "patchOnStartup": false,
+      "patchBeforeStartup": true
+    },
+    {
+      "title": "Tag Patch 3",
+      "author": "DARKC0DE",
+      "description": "This is the 3rd and final patch to enable tag editing.",
+      "pattern": "C6 86 90 33 00 00 01",
+      "match": "xxxxxxx",
+      "offset": -2,
+      "patch": "90 90",
+      "recursivePatch": false,
+      "patchOnStartup": false,
+      "patchBeforeStartup": true
+    },
+    {
+      "title": "Tag Patch 2",
+      "author": "DARKC0DE",
+      "description": "This is patch 2 of 3 needed patches to allow tag modifications",
+      "pattern": "83 C4 0C 3B 07 75",
+      "match": "xxxxxx",
+      "offset": 5,
+      "patch": "90 90",
+      "recursivePatch": false,
+      "patchOnStartup": false,
+      "patchBeforeStartup": true
     }
   ]
 }
