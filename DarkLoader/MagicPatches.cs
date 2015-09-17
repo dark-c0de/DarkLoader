@@ -77,6 +77,7 @@ namespace DarkLoader
             }
             string patchList = File.ReadAllText(Program.PatchFile);
             LoadedPatches = JsonConvert.DeserializeObject<MagicPatches.Patches>(patchList);
+            LoadedPatches.PatchList = LoadedPatches.PatchList.OrderBy(patch => patch.title).ToList();
         }
 
         //TODO: Add pattern scanning functionality.

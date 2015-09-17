@@ -108,6 +108,7 @@ namespace DarkLoader
             }
             string patchList = File.ReadAllText(Program.PatchFile);
             patches = JsonConvert.DeserializeObject<MagicPatches.Patches>(patchList);
+            patches.PatchList = patches.PatchList.OrderBy(patch => patch.title).ToList();
             this.Invoke((MethodInvoker)delegate()
                   {
                       int index = listPatches.SelectedIndex;
