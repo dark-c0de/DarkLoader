@@ -25,19 +25,34 @@ namespace DarkLoader
         {
             InitializeComponent();
         }
+        public static void SetProgressBarValue(long value, long min, long max)
+        {
+            try
+            {
+                pbScan.Maximum = Convert.ToInt32(max / 1024 / 1024);
+                pbScan.Minimum = Convert.ToInt32(min / 1024 / 1024);
+                pbScan.Value = Convert.ToInt32(value / 1024 / 1024);
+            }
+            catch(Exception){
 
+            }
+        }
         private void btnPatchScanTest_click(object sender, EventArgs e)
         {
+
             GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "btnPatchScanTest_click", "");
             if (MainForm.HaloIsRunning)
             {
+                MagicPatches.PatchLoopRun = true;
+                btnPatternScanStop.Enabled = true;
+                btnPatchScanTest.Enabled = false;
+                btnPatchScanTest.Text = "Scanning...";
                 listPatternResults.Items.Clear();
                 Thread patchScanTest = new Thread(PatchScanTest);
                 patchScanTest.Start();
             }
             else
             {
-
                 MessageBox.Show("Halo isn't running, I can't search for a patch!");
             }
         }
@@ -68,7 +83,13 @@ namespace DarkLoader
                     PatchReturnAddress = MagicPatches.ScanForPattern(MainForm.HaloOnline, searchBytePattern, match, offset, startOffset);
                 }
             }
-            lblPatternResultCount.Text = listPatternResults.Items.Count.ToString() + " Results";
+            this.Invoke((MethodInvoker)delegate()
+                    {
+                        lblPatternResultCount.Text = listPatternResults.Items.Count.ToString() + " Results";
+                        btnPatchScanTest.Enabled = true;
+                        btnPatchScanTest.Text = "Test Pattern";
+                        SetProgressBarValue(0, 0, 100);
+                    });
         }
 
         private void listPatternResults_SelectedIndexChanged(object sender, EventArgs e)
@@ -235,6 +256,10 @@ namespace DarkLoader
             GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "btnTestPatchWrite_click", "");
             if (MainForm.HaloIsRunning)
             {
+                MagicPatches.PatchLoopRun = true;
+                btnPatternScanStop.Enabled = true;
+                btnTestPatchWrite.Enabled = false;
+                btnTestPatchWrite.Text = "Writing...";
                 Thread testPatchWrite = new Thread(TestPatchWrite);
                 testPatchWrite.Start();
             }
@@ -288,6 +313,9 @@ namespace DarkLoader
                        {
                            MessageBox.Show("If you're not running a full run, you need to select an address in the patch test results.");
                        }
+                       btnPatternScanStop.Enabled = false;
+                       btnTestPatchWrite.Enabled = true;
+                       btnTestPatchWrite.Text = "Test Patch";
                    });
                 }
 
@@ -413,6 +441,18 @@ namespace DarkLoader
             catch (Exception)
             {
             }
+        }
+
+        private void btnPatternScanStop_Click(object sender, EventArgs e)
+        {
+            MagicPatches.PatchLoopRun = false;
+            btnPatternScanStop.Enabled = false;
+        }
+
+        private void btnPatchStop_Click(object sender, EventArgs e)
+        {
+            MagicPatches.PatchLoopRun = false;
+            btnPatchStop.Enabled = false;
         }
     }
 }

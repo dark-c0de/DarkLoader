@@ -67,12 +67,15 @@
             this.chkPatchReplaceAll = new System.Windows.Forms.CheckBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lblStatusBar = new System.Windows.Forms.ToolStripStatusLabel();
+            pbScan = new System.Windows.Forms.ToolStripProgressBar();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.memoryViewerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.downloadLatestPatchesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.byteHexHelperToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnPatternScanStop = new System.Windows.Forms.Button();
+            this.btnPatchStop = new System.Windows.Forms.Button();
             this.grpScanBytes.SuspendLayout();
             this.grpPatchList.SuspendLayout();
             this.grpPatchInfo.SuspendLayout();
@@ -93,6 +96,7 @@
             // 
             // grpScanBytes
             // 
+            this.grpScanBytes.Controls.Add(this.btnPatternScanStop);
             this.grpScanBytes.Controls.Add(this.btnClearPattern);
             this.grpScanBytes.Controls.Add(this.lblPatternLength);
             this.grpScanBytes.Controls.Add(this.btnFillX);
@@ -113,7 +117,7 @@
             // 
             // btnClearPattern
             // 
-            this.btnClearPattern.Location = new System.Drawing.Point(291, 98);
+            this.btnClearPattern.Location = new System.Drawing.Point(266, 98);
             this.btnClearPattern.Name = "btnClearPattern";
             this.btnClearPattern.Size = new System.Drawing.Size(75, 23);
             this.btnClearPattern.TabIndex = 15;
@@ -153,9 +157,9 @@
             // 
             // btnPatchScanTest
             // 
-            this.btnPatchScanTest.Location = new System.Drawing.Point(372, 98);
+            this.btnPatchScanTest.Location = new System.Drawing.Point(347, 98);
             this.btnPatchScanTest.Name = "btnPatchScanTest";
-            this.btnPatchScanTest.Size = new System.Drawing.Size(115, 23);
+            this.btnPatchScanTest.Size = new System.Drawing.Size(79, 23);
             this.btnPatchScanTest.TabIndex = 7;
             this.btnPatchScanTest.Text = "Test Pattern";
             this.btnPatchScanTest.UseVisualStyleBackColor = true;
@@ -356,6 +360,7 @@
             // 
             // grpPatch
             // 
+            this.grpPatch.Controls.Add(this.btnPatchStop);
             this.grpPatch.Controls.Add(this.btnClearPatch);
             this.grpPatch.Controls.Add(this.lblBytePatchLength);
             this.grpPatch.Controls.Add(this.chkPatchBeforeStartup);
@@ -374,7 +379,7 @@
             // 
             // btnClearPatch
             // 
-            this.btnClearPatch.Location = new System.Drawing.Point(291, 104);
+            this.btnClearPatch.Location = new System.Drawing.Point(266, 104);
             this.btnClearPatch.Name = "btnClearPatch";
             this.btnClearPatch.Size = new System.Drawing.Size(75, 23);
             this.btnClearPatch.TabIndex = 14;
@@ -423,9 +428,9 @@
             // 
             // btnTestPatchWrite
             // 
-            this.btnTestPatchWrite.Location = new System.Drawing.Point(372, 104);
+            this.btnTestPatchWrite.Location = new System.Drawing.Point(347, 104);
             this.btnTestPatchWrite.Name = "btnTestPatchWrite";
-            this.btnTestPatchWrite.Size = new System.Drawing.Size(118, 23);
+            this.btnTestPatchWrite.Size = new System.Drawing.Size(79, 23);
             this.btnTestPatchWrite.TabIndex = 3;
             this.btnTestPatchWrite.Text = "Test Patch";
             this.btnTestPatchWrite.UseVisualStyleBackColor = true;
@@ -453,7 +458,8 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.lblStatusBar});
+            this.lblStatusBar,
+            pbScan});
             this.statusStrip1.Location = new System.Drawing.Point(0, 452);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(894, 22);
@@ -465,6 +471,11 @@
             this.lblStatusBar.Name = "lblStatusBar";
             this.lblStatusBar.Size = new System.Drawing.Size(26, 17);
             this.lblStatusBar.Text = "Idle";
+            // 
+            // pbScan
+            // 
+            pbScan.Name = "pbScan";
+            pbScan.Size = new System.Drawing.Size(300, 16);
             // 
             // menuStrip1
             // 
@@ -514,6 +525,28 @@
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
+            // 
+            // btnPatternScanStop
+            // 
+            this.btnPatternScanStop.Enabled = false;
+            this.btnPatternScanStop.Location = new System.Drawing.Point(432, 98);
+            this.btnPatternScanStop.Name = "btnPatternScanStop";
+            this.btnPatternScanStop.Size = new System.Drawing.Size(55, 23);
+            this.btnPatternScanStop.TabIndex = 16;
+            this.btnPatternScanStop.Text = "STOP";
+            this.btnPatternScanStop.UseVisualStyleBackColor = true;
+            this.btnPatternScanStop.Click += new System.EventHandler(this.btnPatternScanStop_Click);
+            // 
+            // btnPatchStop
+            // 
+            this.btnPatchStop.Enabled = false;
+            this.btnPatchStop.Location = new System.Drawing.Point(432, 104);
+            this.btnPatchStop.Name = "btnPatchStop";
+            this.btnPatchStop.Size = new System.Drawing.Size(55, 23);
+            this.btnPatchStop.TabIndex = 17;
+            this.btnPatchStop.Text = "STOP";
+            this.btnPatchStop.UseVisualStyleBackColor = true;
+            this.btnPatchStop.Click += new System.EventHandler(this.btnPatchStop_Click);
             // 
             // PatchEditor
             // 
@@ -599,5 +632,8 @@
         private System.Windows.Forms.ToolStripMenuItem byteHexHelperToolStripMenuItem;
         private System.Windows.Forms.Button btnClearPatch;
         private System.Windows.Forms.Button btnClearPattern;
+        private System.Windows.Forms.Button btnPatternScanStop;
+        private System.Windows.Forms.Button btnPatchStop;
+        private static System.Windows.Forms.ToolStripProgressBar pbScan;
     }
 }

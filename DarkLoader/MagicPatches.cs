@@ -34,6 +34,7 @@ namespace DarkLoader
                 PatchList = new List<Patch>();
             }
         }
+        public static bool PatchLoopRun = true;
         public static bool RunPatch(string title)
         {
             Patch patch = FindByTitle(title);
@@ -96,7 +97,7 @@ namespace DarkLoader
                     Buffer.BlockCopy(patchBytes, 0, bytes, result + patch.offset, patchBytes.Length);
                     LogFile.WriteToLog("Exe Patch (" + patch.title + ") found and patched at " + (result + patch.offset).ToString("X"));
                     result = Convert.ToInt32(IndexOfBytes(bytes, patchPattern, patch.match));
-                    while (patch.recursivePatch && result > 0)
+                    while (patch.recursivePatch && result > 0 && PatchLoopRun)
                     {
                         Buffer.BlockCopy(patchBytes, 0, bytes, result + patch.offset, patchBytes.Length);
                         LogFile.WriteToLog("Recursive Exe Patch (" + patch.title + ") found and patched at " + (result + patch.offset).ToString("X"));
@@ -124,18 +125,56 @@ namespace DarkLoader
             {
                 startOffset = p.MainModule.BaseAddress;
             }
+            try
+            {
+                //TODO: We need to scan the entire memory (p.WorkingSet64) but that wont all fit in a C# app. 
+                //TODO: We'll need to loop through all the memory eventually...
+                p.Refresh();
+                var memSize = (p.PrivateMemorySize64 + p.WorkingSet64);
 
-            //TODO: We need to scan the entire memory (p.WorkingSet64) but that wont all fit in a C# app. 
-            //TODO: We'll need to loop through all the memory eventually...
-            IntPtr endOffset = IntPtr.Subtract((IntPtr)p.MainModule.ModuleMemorySize, (int)startOffset);
-     
-            SigScan.Classes.SigScan _sigScan = new SigScan.Classes.SigScan();
-            _sigScan.Process = p;
+                IntPtr memoryBlockSize = (IntPtr)(long)(memSize / 64);
+                IntPtr endOffset = IntPtr.Subtract(memoryBlockSize, (int)startOffset);
 
-            _sigScan.Address = startOffset;
-            _sigScan.Size = (int)endOffset;
+                SigScan.Classes.SigScan _sigScan = new SigScan.Classes.SigScan();
+                _sigScan.Process = p;
 
-            return _sigScan.FindPattern(pattern, match, offset);
+                _sigScan.Address = startOffset;
+                _sigScan.Size = (long)endOffset;
+
+                IntPtr result = _sigScan.FindPattern(pattern, match, offset);
+
+                //_sigScan.ResetRegion();
+                IntPtr nextAddress = IntPtr.Add(startOffset, (int)endOffset);
+                bool ShowProgress = false;
+                if (PatchEditor.FormShowing)
+                {
+                    ShowProgress = true;
+                }
+                var patchForm = PatchEditor.ActiveForm;
+                while (result == IntPtr.Zero && (int)nextAddress < memSize && PatchLoopRun)
+                {
+                    if (ShowProgress)
+                    {
+                        patchForm.Invoke(new MethodInvoker(delegate
+                          {
+                              PatchEditor.SetProgressBarValue((long)nextAddress, (long)startOffset, memSize);
+                          }));
+                    }
+                    SigScan.Classes.SigScan _sigScan2 = new SigScan.Classes.SigScan();
+                    _sigScan2.Process = p;
+
+                    _sigScan2.Address = nextAddress;
+                    _sigScan2.Size = (long)endOffset;
+
+                    result = _sigScan2.FindPattern(pattern, match, offset);
+                    nextAddress = IntPtr.Add(nextAddress, (int)endOffset);
+                }
+                return result;
+            }
+            catch (Exception)
+            {
+                return IntPtr.Zero;
+            }
         }
 
         //This will apply a patch to a specific address
@@ -164,7 +203,7 @@ namespace DarkLoader
             else
             {
                 bool patched = false;
-                while (PatchReturnAddress.ToInt32() > 0)
+                while (PatchReturnAddress.ToInt32() > 0 && PatchLoopRun)
                 {
                     Memory.WriteProtectedMemory(p, PatchReturnAddress, patchBytes, patchBytes.Length);
                     LogFile.WriteToLog("Recursive Memory Patch (" + patch.title + ") found and patched at " + PatchReturnAddress.ToString("X"));

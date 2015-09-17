@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Win32.SafeHandles;
+using System.Windows.Forms;
 
 //
 // sigScan C# Implementation - Written by atom0s [aka Wiccaan]
@@ -91,7 +92,7 @@ namespace SigScan.Classes
         /// 
         ///     The number of bytes we wish to read from the process.
         /// </summary>
-        private Int32 m_vSize;
+        private Int64 m_vSize;
 
 
         #region "sigScan Class Construction"
@@ -156,7 +157,7 @@ namespace SigScan.Classes
 
                 // Dump the memory.
                 bReturn = ReadProcessMemory(
-                    this.m_vProcess.Handle, this.m_vAddress, this.m_vDumpedRegion, this.m_vSize, out nBytesRead
+                    this.m_vProcess.Handle, this.m_vAddress, this.m_vDumpedRegion, Convert.ToInt32(this.m_vSize), out nBytesRead
                     );
 
                 // Validation checks.
@@ -164,7 +165,7 @@ namespace SigScan.Classes
                     return false;
                 return true;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return false;
             }
@@ -269,7 +270,7 @@ namespace SigScan.Classes
             get { return this.m_vAddress; }
             set { this.m_vAddress = value; }
         }
-        public Int32 Size
+        public Int64 Size
         {
             get { return this.m_vSize; }
             set { this.m_vSize = value; }
