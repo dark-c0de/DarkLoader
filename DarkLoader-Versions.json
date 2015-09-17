@@ -1,7 +1,7 @@
 {
     "FileList": [{
         "filename": "DarkLoader.exe",
-        "version": "1.0.1.42",
+        "version": "1.0.1.48",
         "url": "https://github.com/dark-c0de/DarkLoader/releases"
     }, {
         "filename": "DarkLoader-Patches.json",
