@@ -111,17 +111,15 @@ namespace DarkLoader
             patches.PatchList = patches.PatchList.OrderBy(patch => patch.title).ToList();
             this.Invoke((MethodInvoker)delegate()
                   {
-                      int index = listPatches.SelectedIndex;
                       listPatches.Items.Clear();
                       listPatternResults.Items.Clear();
                       foreach (var patch in patches.PatchList)
                       {
-
                           listPatches.Items.Add(patch.title);
-
                       }
-                      listPatches.SelectedIndex = index;
                       lblStatusBar.Text = "Loaded Patches";
+                      int patchLocation = patches.PatchList.FindIndex(patch => patch.title == lastSelected);
+                      listPatches.SelectedIndex = patchLocation;
                   });
         }
 
@@ -151,7 +149,7 @@ namespace DarkLoader
                 patches.PatchList.RemoveAt(listPatches.SelectedIndex);
             }
             patches.PatchList.Add(patch);
-
+            lastSelected = txtPatchTitle.Text;
             WritePatchesToDisk();
         }
         private void listPatches_SelectedIndexChanged(object sender, EventArgs e)
@@ -181,11 +179,12 @@ namespace DarkLoader
                 listPatternResults.Items.Clear();
             }
         }
-
+        string lastSelected = "";
         private void btnNewPatch_Click(object sender, EventArgs e)
         {
             GoogleAnalyticsApi.TrackEvent("PatchEditor.cs", "btnNewPatch_Click", "");
             listPatches.Items.Add("New Patch");
+            lastSelected = "New Patch";
             listPatches.SelectedIndex = listPatches.Items.Count - 1;
             txtPatchTitle.Text = "New Patch";
             txtPatchAuthor.Text = "";
@@ -199,7 +198,6 @@ namespace DarkLoader
             chkPatchBeforeStartup.Checked = false;
             listPatternResults.Items.Clear();
             SavePatch();
-
         }
 
         private void btnDeletePatch_Click(object sender, EventArgs e)

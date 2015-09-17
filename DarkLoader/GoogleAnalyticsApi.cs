@@ -14,7 +14,13 @@ namespace DarkLoader
         {
             if (!Program.IsDebug)
             {
-                Track(HitType.@event, category, action, label, value);
+                try
+                {
+                    Track(HitType.@event, category, action, label, value);
+                }
+                catch(Exception){
+
+                }
             }
         }
 
@@ -22,7 +28,14 @@ namespace DarkLoader
         {
             if (!Program.IsDebug)
             {
-                Track(HitType.@pageview, category, action, label, value);
+                try
+                {
+                    Track(HitType.@pageview, category, action, label, value);
+                }
+                catch (Exception)
+                {
+
+                }
             }
         }
 
