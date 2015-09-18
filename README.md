@@ -28,6 +28,7 @@ You can easily help us by building patches, no C# compiling required. Check out 
 3. A list of maps available for the version of Halo Online you're running (Click them to load them).
 4. Hide, Show hud for every game.
 5. Pattern scan and create patterns and patches to share with other users (pull requests!), see [PatchEditor](https://github.com/dark-c0de/DarkLoader/wiki/Patch-Editor)
+6. Enables Tag Editing in all versions of Halo Online
 
 DarkLoader heavily relies on Pattern Scanning to support multiple versions of Halo Online. With the latest release of Halo Online "Live" build, they seemed to have randomized the memory in such a way that static address on your machine might not be in the same memory space as the same static address on other machines. 
 
